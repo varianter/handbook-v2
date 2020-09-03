@@ -4,6 +4,7 @@ import { getStaticProps } from "pages";
 import MarkdownIt from "markdown-it";
 import { useMemo } from "react";
 import React from "react";
+
 import markdownItTocAndAnchor from "markdown-it-toc-and-anchor";
 
 const IndexPage: NextPage<InferGetStaticPropsType<
@@ -14,7 +15,7 @@ const IndexPage: NextPage<InferGetStaticPropsType<
       linkify: true,
       html: true,
       typographer: true,
-    }).use(markdownItTocAndAnchor.default, {
+    }).use(markdownItTocAndAnchor, {
       tocFirstLevel: 2,
       tocLastLevel: 2,
       anchorLink: true,
