@@ -1,4 +1,3 @@
-import style from "./index.module.css";
 import Layout from "src/layout";
 import { NextPage, InferGetStaticPropsType } from "next";
 import { getStaticProps } from "pages";
