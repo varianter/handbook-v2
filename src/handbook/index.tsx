@@ -1,14 +1,12 @@
-import style from "./index.module.css";
-import Layout from "src/layout";
 import { NextPage, InferGetStaticPropsType } from "next";
-import { getStaticProps } from "pages";
+import { getStaticProps } from "pages/[handbook]";
+import React, { useMemo } from "react";
 import MarkdownIt from "markdown-it";
-import { useMemo } from "react";
+import Layout from "src/layout";
 
-const IndexPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  handbooks,
-  content = "",
-}) => {
+const HandbookIndex: NextPage<InferGetStaticPropsType<
+  typeof getStaticProps
+>> = React.memo(({ handbooks, data, content }) => {
   const innerHtml = useMemo(() => {
     const md = new MarkdownIt({
       linkify: true,
@@ -34,6 +32,6 @@ const IndexPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </section>
     </Layout>
   );
-};
+});
 
-export default IndexPage;
+export default HandbookIndex;

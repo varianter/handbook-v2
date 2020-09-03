@@ -1,6 +1,13 @@
 .main {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.content {
+  max-width: 50rem;
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  margin: 0 auto;
 }
 
 .footer {

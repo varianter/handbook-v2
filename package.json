@@ -19,7 +19,10 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "@types/markdown-it": "^10.0.2",
     "@variant/profile": "^2.0.4",
+    "gray-matter": "^4.0.2",
+    "markdown-it": "^11.0.0",
     "next": "^9.4.4",
     "next-images": "^1.4.0",
     "react": "16.13.0",

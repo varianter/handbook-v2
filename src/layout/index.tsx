@@ -25,9 +25,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           content="https://www.variant.no/og-header-min.png"
         />
       </Head>
-      {children}
+      <section className={style.content}>{children}</section>
       <footer className={style.footer}>
-        Ser du noe som burde endres?{"   "}
+        Ser du noe som burde endres?
         <a href="https://github.com/varianter/handbook">
           Send oss en oppdatering.
         </a>

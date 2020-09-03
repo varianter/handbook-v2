@@ -21,3 +21,54 @@ body,
 #root {
   position: relative;
 }
+
+.illustration {
+  max-width: 60%;
+  width: 20rem;
+  margin: 5rem 2rem 2rem;
+  position: relative;
+}
+.illustration--right {
+  float: right;
+  margin: 5rem 0 2rem 2rem;
+  right: -4rem;
+}
+.illustration--left {
+  float: left;
+  margin: 5rem 2rem 2rem 0;
+  left: -4rem;
+}
+.illustration--center {
+  margin: 0 auto;
+  display: block;
+  top: 8rem;
+}
+
+.illustration--headquarter {
+  top: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .content__inner {
+    width: 100%;
+  }
+  ul {
+    padding-left: 3rem;
+  }
+  .illustration {
+    max-width: 40%;
+    width: 13rem;
+  }
+  .illustration--right {
+    margin: 3rem 0 1rem 1rem;
+    right: -1rem;
+  }
+  .illustration--left {
+    margin: 3rem 1rem 1rem 0;
+    left: -1rem;
+  }
+  .illustration--center {
+    margin: 0 auto;
+    display: block;
+  }
+}
