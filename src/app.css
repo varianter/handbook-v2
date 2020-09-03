@@ -26,7 +26,6 @@ body,
   max-width: 60%;
   width: 20rem;
   margin: 5rem 2rem 2rem;
-  position: relative;
 }
 .illustration--right {
   float: right;
@@ -39,7 +38,7 @@ body,
   left: -4rem;
 }
 .illustration--center {
-  margin: 0 auto;
+  margin: 2rem auto;
   display: block;
   top: 8rem;
 }
