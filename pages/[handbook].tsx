@@ -1,4 +1,4 @@
-import { getHandbookData, getHandbookFiles, getMatterFile } from "src/utils/";
+import { getHandbookProps, HandbookProps, getHandbookFiles } from "src/utils/";
 import { GetStaticPaths, GetStaticProps } from "next";
 export { default } from "src/handbook";
 
@@ -18,20 +18,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps<HandbookProps> = async (
+  context
+) => {
   try {
-    const fileName = `${context?.params?.handbook}.md`;
-    const { data, content } = await getMatterFile(fileName);
-
-    const handbooks = await getHandbookData();
+    const handbook = `${context?.params?.handbook}`;
+    const props = await getHandbookProps(handbook);
     return {
-      props: { data, content, handbooks },
+      props,
     };
   } catch (e) {
     console.error(e);
     return {
       props: {
         handbooks: [],
+        subHeadings: [],
       },
     };
   }

@@ -71,3 +71,6 @@ body,
     display: block;
   }
 }
+.markdownIt-Anchor {
+  display: none;
+}

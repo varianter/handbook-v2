@@ -3,30 +3,26 @@ import { getStaticProps } from "pages/[handbook]";
 import React, { useMemo } from "react";
 import MarkdownIt from "markdown-it";
 import Layout from "src/layout";
+import markdownItTocAndAnchor from "markdown-it-toc-and-anchor";
 
 const HandbookIndex: NextPage<InferGetStaticPropsType<
   typeof getStaticProps
->> = React.memo(({ handbooks, content }) => {
+>> = React.memo(({ handbooks, content = "", subHeadings }) => {
   const innerHtml = useMemo(() => {
     const md = new MarkdownIt({
       linkify: true,
       html: true,
       typographer: true,
+    }).use(markdownItTocAndAnchor, {
+      tocFirstLevel: 2,
+      tocLastLevel: 2,
+      anchorLink: true,
     });
     return { __html: md.render(content) };
   }, [content]);
 
   return (
-    <Layout>
-      <ul>
-        {handbooks.map((f: any) => {
-          return (
-            <li key={f.name}>
-              <a href={f.name.toString()}>{f.name}</a>
-            </li>
-          );
-        })}
-      </ul>
+    <Layout handbooks={handbooks} subHeadings={subHeadings}>
       <section>
         <article dangerouslySetInnerHTML={innerHtml}></article>
       </section>

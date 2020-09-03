@@ -1,27 +1,18 @@
-import { getHandbookData, getMatterFile } from "src/utils";
+import { getHandbookProps, HandbookProps } from "src/utils";
 import { GetStaticProps } from "next";
 export { default } from "src/pages/index";
 
-export const getStaticProps: GetStaticProps<{
-  handbooks: Array<{ [key: string]: string | number }>;
-  content?: string;
-}> = async () => {
+export const getStaticProps: GetStaticProps<HandbookProps> = async () => {
   try {
-    const defaultHandbook = "handbook.md";
-    const handbooks = await getHandbookData();
-
-    const { content } = await getMatterFile(defaultHandbook);
-
+    const props = await getHandbookProps();
     return {
-      props: { handbooks, content },
+      props: { ...props },
       revalidate: 60 * 60,
     };
   } catch (e) {
     console.error(e);
     return {
-      props: {
-        handbooks: [],
-      },
+      props: { handbooks: [], subHeadings: [] },
     };
   }
 };

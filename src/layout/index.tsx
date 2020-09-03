@@ -4,9 +4,16 @@ import Head from "next/head";
 
 const favicon = require("@variant/profile/lib/logo/favicon.png");
 
-interface LayoutProps {}
+interface LayoutProps {
+  handbooks: { name: string; title: string }[];
+  subHeadings: string[];
+}
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({
+  subHeadings,
+  handbooks,
+  children,
+}) => {
   const title = "Handboook";
   return (
     <div className={style.main}>
@@ -25,6 +32,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           content="https://www.variant.no/og-header-min.png"
         />
       </Head>
+      <nav>
+        <h1>Håndbøker</h1>
+        <ul>
+          {handbooks.map((f) => {
+            return (
+              <li key={f.title}>
+                <a href={f.name.toString()}>{f.title}</a>
+              </li>
+            );
+          })}
+        </ul>
+        <h1>Kapitler</h1>
+        <ul>
+          {subHeadings.map((f) => {
+            console.log(encodeURIComponent(f));
+            return (
+              <li key={f}>
+                <a href={`#${f.split(" ").join("-").toLowerCase()}`}>{f}</a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
       <section className={style.content}>{children}</section>
       <footer className={style.footer}>
         Ser du noe som burde endres?

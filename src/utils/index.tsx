@@ -1,6 +1,19 @@
 import { promises as fs } from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { getHeadlines } from "@variant/md-section";
+
+export type HandbookData = {
+  data: { [key: string]: any };
+  name: string;
+  title: string;
+};
+
+export type HandbookProps = {
+  handbooks: HandbookData[];
+  content?: string;
+  subHeadings: string[];
+};
 
 export const getHandbookFiles = async () => {
   const files = await fs.readdir(path.join(process.cwd(), "/content"));
@@ -14,17 +27,43 @@ export const getMatterFile = async (
   return matter(file);
 };
 
-export const getHandbookData = async () => {
+const getHandbookData = async (): Promise<HandbookData[]> => {
   const files = await getHandbookFiles();
-  const listings = await Promise.all(
-    files.map(
-      async (fileName): Promise<{ [key: string]: string | number }> => {
-        const matterFile = await getMatterFile(fileName);
-        return { ...matterFile.data, name: fileName.replace(".md", "") };
-      }
-    )
+  const handbooks = await Promise.all(
+    files.map(async (fileName) => {
+      const matterFile = await getMatterFile(fileName);
+
+      const headlines = getHeadlines(matterFile.content, {
+        minLevel: 1,
+        maxLevel: 1,
+      }) as { level: number; content: string }[];
+
+      const title = headlines.length > 0 ? headlines[0].content : "";
+      return {
+        data: matterFile.data,
+        name: fileName.replace(".md", ""),
+        title,
+      };
+    })
   );
-  return listings.sort(
-    (a, b) => Number(b.priority ?? 0) - Number(a.priority ?? 0)
-  );
+  return handbooks;
+};
+
+export const getHandbookProps = async (
+  handbook = "handbook"
+): Promise<HandbookProps> => {
+  const handbooks = await getHandbookData();
+
+  const { content } = await getMatterFile(`${handbook}.md`);
+
+  const subHeadings = getHeadlines(content, {
+    minLevel: 2,
+    maxLevel: 2,
+  }) as { level: number; content: string }[];
+
+  return {
+    handbooks,
+    content,
+    subHeadings: subHeadings.map((sh) => sh.content),
+  };
 };
