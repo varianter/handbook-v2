@@ -6,7 +6,7 @@ import Layout from "src/layout";
 
 const HandbookIndex: NextPage<InferGetStaticPropsType<
   typeof getStaticProps
->> = React.memo(({ handbooks, data, content }) => {
+>> = React.memo(({ handbooks, content }) => {
   const innerHtml = useMemo(() => {
     const md = new MarkdownIt({
       linkify: true,
