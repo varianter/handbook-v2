@@ -46,10 +46,9 @@ const Layout: React.FC<LayoutProps> = ({
         <h1>Kapitler</h1>
         <ul>
           {subHeadings.map((f) => {
-            console.log(encodeURIComponent(f));
             return (
               <li key={f}>
-                <a href={`#${f.split(" ").join("-").toLowerCase()}`}>{f}</a>
+                <a href={`#${f.replace(/ /g, "-").toLowerCase()}`}>{f}</a>
               </li>
             );
           })}
