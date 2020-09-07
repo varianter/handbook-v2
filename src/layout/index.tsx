@@ -32,27 +32,33 @@ const Layout: React.FC<LayoutProps> = ({
           content="https://www.variant.no/og-header-min.png"
         />
       </Head>
-      <nav>
-        <h1>Håndbøker</h1>
-        <ul>
-          {handbooks.map((f) => {
-            return (
-              <li key={f.title}>
-                <a href={f.name.toString()}>{f.title}</a>
-              </li>
-            );
-          })}
-        </ul>
-        <h1>Kapitler</h1>
-        <ul>
-          {subHeadings.map((f) => {
-            return (
-              <li key={f}>
-                <a href={`#${f.replace(/ /g, "-").toLowerCase()}`}>{f}</a>
-              </li>
-            );
-          })}
-        </ul>
+      <nav className={style.nav}>
+        <section className={style.nav__inner}>
+          <a href="/" className={style.nav__logo}>
+            <img src={require("./variant.svg")} alt="Variant" />
+          </a>
+          <ul className={style.nav__handbooks}>
+            {handbooks.map((handbook) => {
+              return (
+                <li key={handbook.title}>
+                  <a href={handbook.name.toString()}>{handbook.title}</a>
+                </li>
+              );
+            })}
+          </ul>
+          <p>Innhold</p>
+          <ul>
+            {subHeadings.map((heading) => {
+              return (
+                <li key={heading}>
+                  <a href={`#${heading.replace(/ /g, "-").toLowerCase()}`}>
+                    {heading}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
       </nav>
       <section className={style.content}>{children}</section>
       <footer className={style.footer}>

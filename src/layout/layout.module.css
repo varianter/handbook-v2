@@ -1,6 +1,5 @@
 .main {
-  position: relative;
-  overflow-x: hidden;
+  display: flex;
 }
 
 .content {
@@ -8,6 +7,56 @@
   min-height: 100vh;
   min-height: -webkit-fill-available;
   margin: 0 auto;
+}
+
+.nav {
+  width: 30%;
+  max-width: 25rem;
+  min-width: 15rem;
+  margin-right: 2rem;
+
+  position: relative;
+
+  background: var(--color-secondary4__tint3);
+}
+
+.nav__inner {
+  position: sticky;
+  top: 0;
+  overflow: auto;
+  max-height: 100vh;
+  padding: 2rem 2rem 6rem;
+
+  font-size: 1.2rem;
+}
+
+.nav__logo {
+  padding: 1.5rem 2rem 2rem;
+  display: block;
+}
+.nav__inner p {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.nav__inner ul {
+  list-style-type: lower-roman;
+  padding-left: 1.5rem;
+}
+.nav__inner ul li {
+  padding-bottom: 1.5rem;
+  color: var(--color-secondary3);
+}
+
+.nav__inner ul li:hover {
+  color: var(--color-primary);
+}
+.nav__inner ul a {
+  text-decoration: none;
+  color: var(--color-standard__black);
+}
+
+.nav__inner ul a:hover {
+  border-bottom: 1px solid var(--color-secondary2);
 }
 
 .footer {
