@@ -20,6 +20,23 @@ const IndexPage: NextPage<InferGetStaticPropsType<
       tocLastLevel: 2,
       anchorLink: true,
     });
+
+    md.renderer.rules.heading_open = function (tokens, idx) {
+      const currentToken = tokens[idx];
+      if (currentToken.type === "heading_open") {
+        return `<h${currentToken.markup.length + 2}>`;
+      }
+      return currentToken.tag;
+    };
+
+    md.renderer.rules.heading_close = function (tokens, idx) {
+      const currentToken = tokens[idx];
+      if (currentToken.type === "heading_close") {
+        return `</h${currentToken.markup.length + 2}>`;
+      }
+      return currentToken.tag;
+    };
+
     return { __html: md.render(content) };
   }, [content]);
 
