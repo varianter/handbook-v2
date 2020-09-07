@@ -1,31 +1,15 @@
 import { NextPage, InferGetStaticPropsType } from "next";
 import { getStaticProps } from "pages/[handbook]";
-import React, { useMemo } from "react";
-import MarkdownIt from "markdown-it";
+import React from "react";
 import Layout from "src/layout";
-import markdownItTocAndAnchor from "markdown-it-toc-and-anchor";
+import Book from "src/components/book";
 
 const HandbookIndex: NextPage<InferGetStaticPropsType<
   typeof getStaticProps
 >> = React.memo(({ handbooks, content = "", subHeadings }) => {
-  const innerHtml = useMemo(() => {
-    const md = new MarkdownIt({
-      linkify: true,
-      html: true,
-      typographer: true,
-    }).use(markdownItTocAndAnchor, {
-      tocFirstLevel: 2,
-      tocLastLevel: 2,
-      anchorLink: true,
-    });
-    return { __html: md.render(content) };
-  }, [content]);
-
   return (
     <Layout handbooks={handbooks} subHeadings={subHeadings}>
-      <section>
-        <article dangerouslySetInnerHTML={innerHtml}></article>
-      </section>
+      <Book content={content} headerOffset={0} />
     </Layout>
   );
 });
