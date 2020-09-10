@@ -9,7 +9,7 @@ const IndexPage: NextPage<InferGetStaticPropsType<
 >> = React.memo(({ handbooks, content = "", subHeadings }) => {
   return (
     <Layout handbooks={handbooks} subHeadings={subHeadings}>
-      <Book content={content} headerOffset={2} />
+      <Book content={content} />
     </Layout>
   );
 });

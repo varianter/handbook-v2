@@ -1,6 +1,6 @@
 import { getHandbookProps, HandbookProps } from "src/utils";
 import { GetStaticProps } from "next";
-export { default } from "src/pages/index";
+export { default } from "src/index/index";
 
 export const getStaticProps: GetStaticProps<HandbookProps> = async () => {
   try {
