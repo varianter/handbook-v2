@@ -103,7 +103,22 @@ body,
 .handbook * + h3 {
   margin-top: 2rem;
 }
-
+.handbook code {
+  padding: 0.4rem;
+  border-radius: 0.2rem;
+  background-color: var(--color-secondary3);
+}
+.handbook a {
+  text-decoration: none;
+  color: var(--color-standard__black);
+  border-bottom: 2px solid var(--color-secondary2);
+}
+.handbook a:visited {
+  color: var(--color-standard__black);
+}
+.handbook a:hover {
+  border-bottom: 2px solid var(--color-secondary3);
+}
 @keyframes backgroundPos {
   0% {
     background-position: left;
