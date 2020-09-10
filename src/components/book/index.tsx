@@ -4,9 +4,8 @@ import markdownItTocAndAnchor from "markdown-it-toc-and-anchor";
 
 interface BookProps {
   content: string;
-  headerOffset: number;
 }
-const Book = ({ content, headerOffset }: BookProps) => {
+const Book = ({ content }: BookProps) => {
   const innerHtml = useMemo(() => {
     const md = new MarkdownIt({
       linkify: true,
@@ -14,25 +13,9 @@ const Book = ({ content, headerOffset }: BookProps) => {
       typographer: true,
     }).use(markdownItTocAndAnchor, {
       tocFirstLevel: 2,
-      tocLastLevel: 2,
+      tocLastLevel: 6,
       anchorLink: true,
     });
-
-    md.renderer.rules.heading_open = function (tokens, idx) {
-      const currentToken = tokens[idx];
-      if (currentToken.type === "heading_open") {
-        return `<h${currentToken.markup.length + headerOffset}>`;
-      }
-      return currentToken.tag;
-    };
-
-    md.renderer.rules.heading_close = function (tokens, idx) {
-      const currentToken = tokens[idx];
-      if (currentToken.type === "heading_close") {
-        return `</h${currentToken.markup.length + headerOffset}>`;
-      }
-      return currentToken.tag;
-    };
 
     return { __html: md.render(content) };
   }, [content]);

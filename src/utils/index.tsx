@@ -7,6 +7,7 @@ export type HandbookData = {
   data: { [key: string]: any };
   name: string;
   title: string;
+  content: string | null;
 };
 
 export type HandbookProps = {
@@ -27,7 +28,9 @@ export const getMatterFile = async (
   return matter(file);
 };
 
-const getHandbookData = async (): Promise<HandbookData[]> => {
+export const getHandbookData = async (
+  includeContent = false
+): Promise<HandbookData[]> => {
   const files = await getHandbookFiles();
   const handbooks = await Promise.all(
     files.map(async (fileName) => {
@@ -43,6 +46,7 @@ const getHandbookData = async (): Promise<HandbookData[]> => {
         data: matterFile.data,
         name: fileName.replace(".md", ""),
         title,
+        content: includeContent ? matterFile.content : null,
       };
     })
   );

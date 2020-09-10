@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./layout.module.css";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const favicon = require("@variant/profile/lib/logo/favicon.png");
 
 interface LayoutProps {
   handbooks: { name: string; title: string }[];
-  subHeadings: string[];
+  subHeadings?: string[];
+  currentSearch?: string;
 }
 
 const Layout: React.FC<LayoutProps> = ({
-  subHeadings,
+  subHeadings = [],
+  currentSearch = "",
   handbooks,
   children,
 }) => {
-  const title = "Handboook";
+  const [searchQuery, setSearchQuery] = useState(currentSearch);
+  const router = useRouter();
+  const title = "Variant Håndbok";
+  const performSearch = () => {
+    if (searchQuery.length < 3) return;
+
+    router.push({
+      pathname: "/search",
+      query: { q: encodeURIComponent(searchQuery) },
+    });
+  };
   return (
     <div className={style.main}>
       <Head>
@@ -46,18 +59,35 @@ const Layout: React.FC<LayoutProps> = ({
               );
             })}
           </ul>
-          <p>Innhold</p>
-          <ul>
-            {subHeadings.map((heading) => {
-              return (
-                <li key={heading}>
-                  <a href={`#${heading.replace(/ /g, "-").toLowerCase()}`}>
-                    {heading}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+          {subHeadings.length > 0 ? (
+            <>
+              <p>Innhold</p>
+              <ul>
+                {subHeadings.map((heading) => {
+                  return (
+                    <li key={heading}>
+                      <a href={`#${heading.replace(/ /g, "-").toLowerCase()}`}>
+                        {heading}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          ) : null}
+          <form
+            className={style.nav__inner__searchform}
+            onSubmit={(e) => {
+              e.preventDefault();
+              performSearch();
+            }}
+          >
+            <input
+              defaultValue={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button type="submit">Søk</button>
+          </form>
         </section>
       </nav>
       <section className={style.content}>{children}</section>

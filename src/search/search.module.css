@@ -1,0 +1,31 @@
+.searchResult {
+  margin: 1rem 1rem;
+}
+.searchResult a {
+  font-family: "Graphik Web", Arial, sans-serif;
+  font-weight: normal;
+  font-size: 1.2rem;
+  line-height: 1.3;
+
+  color: var(--color-standard__black);
+}
+.searchResult a:visited {
+  color: var(--color-standard__black);
+}
+.searchResult a:hover {
+  color: var(--color-secondary2__shade2);
+}
+
+.searchResult__content {
+  margin: 0;
+}
+
+.searchResult__handbookTitle {
+  font-style: italic;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.searchResults {
+  margin-top: 3rem;
+}
