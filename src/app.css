@@ -119,6 +119,9 @@ body,
 .handbook a:hover {
   border-bottom: 2px solid var(--color-secondary3);
 }
+.handbook strong {
+  font-weight: 500;
+}
 @keyframes backgroundPos {
   0% {
     background-position: left;
