@@ -50,7 +50,7 @@ body,
 .handbook > h1:first-child {
   font-weight: 700;
   margin: 3rem 0;
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   background: linear-gradient(
     to right,
     var(--color-primary),
