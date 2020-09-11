@@ -13,7 +13,7 @@
 }
 
 .header {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   background-color: #ede8d7;
 }
@@ -94,6 +94,10 @@
     transform: translateX(0);
     width: 100%;
     max-width: none;
+  }
+
+  .header {
+    display: flex;
   }
 }
 

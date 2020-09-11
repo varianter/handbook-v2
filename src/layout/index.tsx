@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import style from "./layout.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({
   const [searchQuery, setSearchQuery] = useState(currentSearch);
   const [navActive, setNavActive] = useState(false);
   const [screenWidth, setScreenWidth] = useState(0);
-  useEffect(() => {
+  useLayoutEffect(() => {
     setScreenWidth(window.innerWidth);
     let timeoutId: any = null;
     const setWindowSize = () => {
@@ -99,12 +99,12 @@ const Layout: React.FC<LayoutProps> = ({
       ) : null}
       <nav className={and(style.nav, navActive ? style.nav__active : " ")}>
         <section className={style.nav__inner}>
-          {isSmall ? (
-            <p>Håndbøker</p>
-          ) : (
+          {!isSmall ? (
             <a href="/" className={style.nav__logo}>
               <img src={require("./variant.svg")} alt="Variant" />
             </a>
+          ) : (
+            <p>Håndbøker</p>
           )}
           <ul className={style.nav__handbooks}>
             {handbooks.map((handbook) => {
