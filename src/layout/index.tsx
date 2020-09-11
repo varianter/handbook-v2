@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import style from "./layout.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({
   const [searchQuery, setSearchQuery] = useState(currentSearch);
   const [navActive, setNavActive] = useState(false);
   const [screenWidth, setScreenWidth] = useState(0);
-  useLayoutEffect(() => {
+  useEffect(() => {
     setScreenWidth(window.innerWidth);
     let timeoutId: any = null;
     const setWindowSize = () => {

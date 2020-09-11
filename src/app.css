@@ -23,7 +23,6 @@ body,
 }
 
 .illustration {
-  max-width: 60%;
   width: 20rem;
   margin: 5rem 2rem 2rem;
 }
@@ -63,6 +62,11 @@ body,
   background-clip: text;
   transition: color 0.2s ease-in-out;
   color: transparent;
+}
+
+.handbook img {
+  width: 100%;
+  height: auto;
 }
 
 /*  TODO Copied from handbooks */
