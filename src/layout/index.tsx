@@ -111,9 +111,19 @@ const Layout: React.FC<LayoutProps> = ({
             {handbooks.map((handbook) => {
               return (
                 <li key={handbook.title}>
-                  <Link href="/[handbook]" as={handbook.name.toString()}>
+                  <a
+                    onClick={() => {
+                      router.push({
+                        href: "/[handbook]",
+                        pathname: handbook.name.toString(),
+                      });
+                      if (navActive) {
+                        setNavActive(false);
+                      }
+                    }}
+                  >
                     {handbook.title}
-                  </Link>
+                  </a>
                 </li>
               );
             })}
@@ -125,7 +135,14 @@ const Layout: React.FC<LayoutProps> = ({
                 {subHeadings.map((heading) => {
                   return (
                     <li key={heading}>
-                      <a href={`#${heading.replace(/ /g, "-").toLowerCase()}`}>
+                      <a
+                        onClick={() => {
+                          if (navActive) {
+                            setNavActive(false);
+                          }
+                        }}
+                        href={`#${heading.replace(/ /g, "-").toLowerCase()}`}
+                      >
                         {heading}
                       </a>
                     </li>
