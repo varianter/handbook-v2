@@ -9,6 +9,7 @@
   margin: 0 auto;
   margin-left: 21rem;
   padding: 0.5rem;
+  padding-bottom: 5rem;
   flex-grow: 1;
   box-sizing: border-box;
 }
