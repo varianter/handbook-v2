@@ -40,6 +40,7 @@ body,
   margin: 2rem auto;
   display: block;
   top: 8rem;
+  max-width: 35rem;
 }
 
 .illustration--headquarter {
@@ -62,11 +63,6 @@ body,
   background-clip: text;
   transition: color 0.2s ease-in-out;
   color: transparent;
-}
-
-.handbook img {
-  width: 100%;
-  height: auto;
 }
 
 /*  TODO Copied from handbooks */
