@@ -1,5 +1,5 @@
 .main {
-  display: flex;
+  overflow-x: hidden;
 }
 
 .content {
@@ -7,24 +7,100 @@
   min-height: 100vh;
   min-height: -webkit-fill-available;
   margin: 0 auto;
+  padding: 0.5rem;
+  flex-grow: 1;
+  box-sizing: border-box;
 }
 
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #ede8d7;
+}
+
+.header__logo {
+  position: absolute;
+  right: 1.35rem;
+  top: 1.35rem;
+}
+.header__logo img {
+  display: block;
+  height: 0.9rem;
+}
+
+.burgerButtonContainer {
+  background-color: transparent;
+  border: 0;
+  font-size: 1.2rem;
+  cursor: pointer;
+
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0.5rem;
+}
+
+.burgerButtonContainer:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.15rem rgba(21, 156, 228, 0.4);
+}
+
+.bar1,
+.bar2,
+.bar3 {
+  position: relative;
+  width: 1.8rem;
+  height: 0.2rem;
+  background-color: var(--color-secondary1);
+  margin: 0.29rem 0;
+  transition: 0.3s;
+}
+
+.bar1_change,
+.bar2_change,
+.bar3_change {
+  composes: bar1;
+}
+
+.bar1_change {
+  -webkit-transform: rotate(-45deg) translate(-0.35rem, 0.35rem);
+  transform: rotate(-45deg) translate(-0.35rem, 0.35rem);
+}
+.bar2_change {
+  opacity: 0;
+}
+.bar3_change {
+  -webkit-transform: rotate(45deg) translate(-0.35rem, -0.35rem);
+  transform: rotate(45deg) translate(-0.35rem, -0.35rem);
+}
 .nav {
   width: 30%;
   max-width: 25rem;
-  min-width: 20rem;
-  margin-right: 2rem;
+  min-width: 25rem;
 
-  position: relative;
+  background-color: #ede8d7;
 
-  background: var(--color-secondary4__tint3);
+  height: 100vh;
+  height: -webkit-fill-available;
+  position: fixed;
+  overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+  .nav {
+    transform: translateX(-100%);
+  }
+
+  .nav__active {
+    transform: translateX(0);
+    width: 100%;
+    max-width: none;
+  }
 }
 
 .nav__inner {
   position: sticky;
   top: 0;
   overflow: auto;
-  height: 100vh;
   padding: 2rem 2rem 6rem;
 
   font-size: 1.2rem;
@@ -58,9 +134,12 @@
 .nav__inner ul a:hover {
   border-bottom: 2px solid var(--color-secondary2);
 }
+
 .nav__inner__searchform {
   display: flex;
+  margin-bottom: 3rem;
 }
+
 .nav__inner__searchform button {
   margin-left: 0.5rem;
   border: none;

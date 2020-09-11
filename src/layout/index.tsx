@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "./layout.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
+
+export const and = (...classes: string[]) => classes.join(" ");
 
 const favicon = require("@variant/profile/lib/logo/favicon.png");
 
@@ -18,6 +20,25 @@ const Layout: React.FC<LayoutProps> = ({
   children,
 }) => {
   const [searchQuery, setSearchQuery] = useState(currentSearch);
+  const [navActive, setNavActive] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(0);
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+    let timeoutId: any = null;
+    const setWindowSize = () => {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => setScreenWidth(window.innerWidth), 100);
+    };
+
+    window.addEventListener("resize", setWindowSize);
+    return () => {
+      window.removeEventListener("resize", setWindowSize);
+    };
+  }, []);
+
+  const isSmall = screenWidth < 600;
+
   const router = useRouter();
   const title = "Variant Håndbok";
   const performSearch = () => {
@@ -28,8 +49,14 @@ const Layout: React.FC<LayoutProps> = ({
       query: { q: encodeURIComponent(searchQuery) },
     });
   };
+
   return (
-    <div className={style.main}>
+    <div
+      className={style.main}
+      style={
+        navActive && isSmall ? { position: "fixed" } : { position: "relative" }
+      }
+    >
       <Head>
         <title>{title}</title>
         <link rel="icon" href={favicon} />
@@ -45,11 +72,39 @@ const Layout: React.FC<LayoutProps> = ({
           content="https://www.variant.no/og-header-min.png"
         />
       </Head>
-      <nav className={style.nav}>
-        <section className={style.nav__inner}>
-          <a href="/" className={style.nav__logo}>
-            <img src={require("./variant.svg")} alt="Variant" />
+      {isSmall ? (
+        <header className={style.header}>
+          <button
+            className={style.burgerButtonContainer}
+            id="hamburger"
+            aria-labelledby="menu-label"
+            aria-expanded={navActive}
+            onClick={() => setNavActive(!navActive)}
+          >
+            <div
+              className={and(style.bar1, navActive ? style.bar1_change : "")}
+            />
+            <div
+              className={and(style.bar2, navActive ? style.bar2_change : "")}
+            />
+            <div
+              className={and(style.bar3, navActive ? style.bar3_change : "")}
+            />
+          </button>
+          <a href="/" className={style.header__logo}>
+            <img src={require("./variant-bw.svg")} alt="Variant" />
           </a>
+        </header>
+      ) : null}
+      <nav className={and(style.nav, navActive ? style.nav__active : " ")}>
+        <section className={style.nav__inner}>
+          {isSmall ? (
+            <p>Håndbøker</p>
+          ) : (
+            <a href="/" className={style.nav__logo}>
+              <img src={require("./variant.svg")} alt="Variant" />
+            </a>
+          )}
           <ul className={style.nav__handbooks}>
             {handbooks.map((handbook) => {
               return (
