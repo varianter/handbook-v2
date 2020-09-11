@@ -48,6 +48,7 @@ const Layout: React.FC<LayoutProps> = ({
       pathname: "/search",
       query: { q: encodeURIComponent(searchQuery) },
     });
+    setNavActive(false);
   };
 
   return (
