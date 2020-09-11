@@ -3,7 +3,6 @@ import style from "./layout.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import Link from "next/link";
 export const and = (...classes: string[]) => classes.join(" ");
 
 const favicon = require("@variant/profile/lib/logo/favicon.png");
