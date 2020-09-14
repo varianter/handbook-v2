@@ -3,7 +3,13 @@ import style from "./layout.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
+const title = "Variant Håndbok";
+
 export const and = (...classes: string[]) => classes.join(" ");
+const isActiveHandbook = (handbookName: string, asPath: string) => {
+  if (asPath === "/" && handbookName === "handbook") return true;
+  return `/${handbookName}` === asPath;
+};
 
 const favicon = require("@variant/profile/lib/logo/favicon.png");
 
@@ -40,7 +46,9 @@ const Layout: React.FC<LayoutProps> = ({
   const isSmall = screenWidth < 600;
 
   const router = useRouter();
-  const title = "Variant Håndbok";
+
+  const asPath = router.asPath;
+
   const performSearch = () => {
     if (searchQuery.length < 3) return;
 
@@ -109,7 +117,14 @@ const Layout: React.FC<LayoutProps> = ({
           <ul className={style.nav__handbooks}>
             {handbooks.map((handbook) => {
               return (
-                <li key={handbook.title}>
+                <li
+                  key={handbook.title}
+                  className={
+                    isActiveHandbook(handbook.name, asPath)
+                      ? style.nav__inner__link__active
+                      : style.nav__inner__link
+                  }
+                >
                   <a
                     onClick={() => {
                       router.push({
@@ -133,7 +148,7 @@ const Layout: React.FC<LayoutProps> = ({
               <ul>
                 {subHeadings.map((heading) => {
                   return (
-                    <li key={heading}>
+                    <li key={heading} className={style.nav__inner__link}>
                       <a
                         onClick={() => {
                           if (navActive) {
