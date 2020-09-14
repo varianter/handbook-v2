@@ -14,6 +14,15 @@ const regexEqual = (x, y) => {
 
 module.exports = withPlugins([withImages], {
   target: "serverless",
+  redirects: async () => {
+    return [
+      {
+        source: "/:slug*.html",  // Old url with .html
+        destination: "/:slug*", // Redirect without .html
+        permanent: true
+      }
+    ]
+  },
   webpack: (config) => {
     const oneOf = config.module.rules.find(
       (rule) => typeof rule.oneOf === "object"
