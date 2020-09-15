@@ -74,6 +74,7 @@
   -webkit-transform: rotate(45deg) translate(-0.35rem, -0.35rem);
   transform: rotate(45deg) translate(-0.35rem, -0.35rem);
 }
+
 .nav {
   max-width: 20rem;
   min-width: 20rem;
@@ -89,10 +90,13 @@
 @media (max-width: 600px) {
   .nav {
     transform: translateX(-100%);
+    transition: transform 450ms ease-in-out;
   }
 
   .nav__active {
     transform: translateX(0);
+    transition: transform 450ms ease-in-out;
+
     width: 100%;
     max-width: none;
   }
