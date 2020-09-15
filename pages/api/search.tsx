@@ -10,6 +10,7 @@ async function doSearch(searchQuery: string[]): Promise<SearchResult[]> {
 export interface SearchResult {
   header: string;
   headerLevel: number;
+  link: string;
   content: string;
   handbookTitle: string;
   handbookName: string;
@@ -51,6 +52,7 @@ function searchHandbook(
       currentheading = {
         headerLevel: level,
         header: header,
+        link: getChapterLink(handbook.name, header),
         headerTags: splitTrimAndLowercase(header),
         contentTags: [],
         content: "",
@@ -68,6 +70,10 @@ function searchHandbook(
     }
   }
   return result;
+}
+
+function getChapterLink(handbookName: string, header: string) {
+  return `/${handbookName}#${header.replace(/ /g, "-").toLowerCase()}`;
 }
 
 // We can probably find a list of these somewhere

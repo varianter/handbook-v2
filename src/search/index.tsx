@@ -50,13 +50,7 @@ const SearchResultsList = ({ results }: { results?: SearchResult[] }) => {
         results.map((result, idx) => {
           return (
             <div className={style.searchResult} key={idx}>
-              <a
-                href={`/${result.handbookName}#${result.header
-                  .replace(/ /g, "-")
-                  .toLowerCase()}`}
-              >
-                {result.header}
-              </a>
+              <a href={result.link}>{result.header}</a>
               <p className={style.searchResult__handbookTitle}>
                 {result.handbookTitle}
               </p>
