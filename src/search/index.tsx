@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { SearchResult } from "pages/api/search";
 import style from "./search.module.css";
 import { useRouter } from "next/router";
+import Book from "src/components/book";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -54,7 +55,7 @@ const SearchResultsList = ({ results }: { results?: SearchResult[] }) => {
               <p className={style.searchResult__handbookTitle}>
                 {result.handbookTitle}
               </p>
-              <p className={style.searchResult__content}>{result.content}</p>
+              <Book content={result.content}></Book>
             </div>
           );
         })
