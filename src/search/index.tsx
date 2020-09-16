@@ -51,7 +51,9 @@ const SearchResultsList = ({ results }: { results?: SearchResult[] }) => {
         results.map((result, idx) => {
           return (
             <div className={style.searchResult} key={idx}>
-              <a href={result.link}>{result.header}</a>
+              <a className={style.searchResult__link} href={result.link}>
+                {result.header}
+              </a>
               <p className={style.searchResult__handbookTitle}>
                 {result.handbookTitle}
               </p>

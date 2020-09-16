@@ -1,7 +1,7 @@
 .searchResult {
   margin: 1rem 1rem;
 }
-.searchResult a {
+.searchResult__link {
   font-family: "Graphik Web", Arial, sans-serif;
   font-weight: normal;
   font-size: 1.4rem;
