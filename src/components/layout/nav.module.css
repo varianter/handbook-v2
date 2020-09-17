@@ -4,7 +4,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white;
+  z-index: 100;
 
   display: grid;
   grid-template-columns: 1fr 18rem;
@@ -12,23 +12,75 @@
   /* grid-template-rows: 1fr auto; */
   grid-template-areas:
     /* ". ." */ ". list";
+  background-image: linear-gradient(
+    45deg,
+    #f1eddfc2,
+    var(--color-secondary4__tint3)
+  );
 }
 
 .nav {
   grid-area: list;
   max-height: 100vh;
-  overflow-y: auto;
-  background: var(--color-secondary2__tint3);
+  /* overflow-y: auto; */
+  /* height: 65vh; */
+  /* background: #ffd0c9; */
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
 }
 
 .nav__list {
   padding: 0;
   list-style: none;
   grid-area: sub-nav;
+
+  max-height: 100%;
+
+  margin: 0;
 }
 
-.nav__list_item {
+.nav__list_main {
+  padding: 3rem 1rem 7rem;
+  overflow-y: scroll;
+}
+
+.nav__toggle {
+  padding: 1.5rem 1rem;
+  /* background-color: #ffd0c9; */
+  position: relative;
+  z-index: 10;
+  position: absolute;
+  bottom: 100%;
+  width: 100%;
+}
+
+.nav__close {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 1rem 2rem;
+  width: 100%;
+  /* background-image: linear-gradient(#ffd0c900, #ffd0c9); */
+}
+
+.nav__toggle,
+.nav__close {
+  text-align: right;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.nav__expand {
+  width: 100%;
+}
+
+.nav__list_head {
   overflow: hidden;
+  padding-bottom: 0.5rem;
+}
+.nav__list_item {
+  /* overflow: hidden; */
   justify-content: left;
   display: grid;
   grid-template-columns: 2rem 1fr;
@@ -42,9 +94,12 @@
   padding: 0.25rem;
   text-decoration: none;
   grid-area: link;
+  color: inherit;
 }
-.nav__link_main {
-  font-weight: bold;
+
+.nav__link_head {
+  font-weight: 500;
+  font-size: 20px;
 }
 
 .button_expand {
@@ -57,3 +112,41 @@
 .button_expand:focus {
   outline: none;
 }
+
+.blob__top,
+.blob__bottom {
+  pointer-events: none;
+}
+
+.blob__top {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.blob__bottom {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -0%);
+  transform: translate(-50%, -30%);
+}
+
+.svg__top,
+.svg__bottom {
+  width: 200%;
+  animation-duration: 100s;
+  animation-name: ROTARY;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ROTARY {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} ; ;
