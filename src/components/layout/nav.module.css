@@ -22,9 +22,6 @@
 .nav {
   grid-area: list;
   max-height: 100vh;
-  /* overflow-y: auto; */
-  /* height: 65vh; */
-  /* background: #ffd0c9; */
   display: flex;
   flex-flow: column;
   justify-content: space-around;
@@ -47,7 +44,6 @@
 
 .nav__toggle {
   padding: 1.5rem 1rem;
-  /* background-color: #ffd0c9; */
   position: relative;
   z-index: 10;
   position: absolute;
@@ -61,12 +57,12 @@
   right: 0;
   padding: 1rem 2rem;
   width: 100%;
-  /* background-image: linear-gradient(#ffd0c900, #ffd0c9); */
 }
 
 .nav__toggle,
 .nav__close {
   text-align: right;
+  cursor: pointer;
   font-size: 20px;
   font-weight: 500;
 }
@@ -98,6 +94,7 @@
 }
 
 .nav__link_head {
+  cursor: pointer;
   font-weight: 500;
   font-size: 20px;
 }
@@ -136,7 +133,7 @@
 .svg__top,
 .svg__bottom {
   width: 200%;
-  animation-duration: 100s;
+  animation-duration: 150s;
   animation-name: ROTARY;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -149,4 +146,4 @@
   to {
     transform: rotate(360deg);
   }
-} ; ;
+}

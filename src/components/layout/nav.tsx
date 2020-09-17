@@ -7,11 +7,6 @@ import { HandbookData } from "src/utils";
 
 export const and = (...classes: string[]) => classes.join(" ");
 
-const isActiveHandbook = (handbookName: string, asPath: string) => {
-  if (asPath === "/" && handbookName === "handbook") return true;
-  return `/${handbookName}` === asPath;
-};
-
 const getActiveHandbook = (asPath: string, handbookNames: string[]) => {
   if (asPath === "/") return "handbook";
   return handbookNames.find((hn) => `/${hn}` === asPath);
@@ -130,15 +125,21 @@ const Nav = ({ handbooks, currentSearch = "" }: NavProps) => {
               setNavActive(!navActive);
             }}
           >
-            {" "}
             Meny{" "}
           </div>
 
           <ul className={and(style.nav__list, style.nav__list_main)}>
             {handbooks.map((handbook) => (
               <HandbookLink
-                isActive={isActiveHandbook(handbook.name, asPath)}
+                isActive={activeHandbook === handbook.name}
                 handbook={handbook}
+                toggleActive={() => {
+                  if (activeHandbook === handbook.name) {
+                    setActiveHandbook("");
+                  } else {
+                    setActiveHandbook(handbook.name);
+                  }
+                }}
               />
             ))}
           </ul>
@@ -173,13 +174,12 @@ const Nav = ({ handbooks, currentSearch = "" }: NavProps) => {
 const HandbookLink = ({
   handbook,
   isActive,
+  toggleActive,
 }: {
   handbook: HandbookData;
   isActive: boolean;
+  toggleActive: () => void;
 }) => {
-  //const [open, setOpen] = useState(isActive);
-  const [open, toggleOpen] = useCycle(false, true);
-
   const listStates = {
     open: {
       height: "auto",
@@ -227,16 +227,13 @@ const HandbookLink = ({
       layout
       key={handbook.title}
       className={and(style.nav__list_item, style.nav__list_head)}
+      onClick={() => toggleActive()}
     >
-      <button
-        className={style.button_expand}
-        type="button"
-        onClick={() => toggleOpen()}
-      >
+      <button className={style.button_expand} type="button">
         <motion.span
           variants={arrowStates}
           style={{ display: "inline-block" }}
-          animate={open}
+          animate={isActive}
           /* animate={open ? "open" : "collapsed"}
           initial={open ? "open" : "collapsed"} */
         >
@@ -259,18 +256,27 @@ const HandbookLink = ({
           </svg>
         </motion.span>
       </button>
-      <Link href="/[handbook]" as={handbook.name.toString()}>
-        <a className={and(style.nav__link, style.nav__link_head)}>
-          {handbook.title}
-        </a>
-      </Link>
+      <a className={and(style.nav__link, style.nav__link_head)}>
+        {handbook.title}
+      </a>
 
       <motion.ul
         className={style.nav__list}
         variants={listStates}
-        animate={open ? "open" : "collapsed"}
-        initial={open ? "open" : "collapsed"}
+        animate={isActive ? "open" : "collapsed"}
+        initial={isActive ? "open" : "collapsed"}
       >
+        <motion.li
+          variants={itemStates}
+          /* animate={open ? "open" : "collapsed"}
+              initial={open ? "open" : "collapsed"} */
+          key={handbook.name}
+          className={style.nav__list_item}
+        >
+          <Link href="/[handbook]" as={handbook.name.toString()}>
+            <a className={style.nav__link}>Intro</a>
+          </Link>
+        </motion.li>
         {handbook.subHeadings.map((heading) => {
           const hash = `${handbook.name.toString()}#${heading
             .replace(/ /g, "-")
