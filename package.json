@@ -22,6 +22,7 @@
     "@types/markdown-it": "^10.0.2",
     "@variant/md-section": "^1.0.0",
     "@variant/profile": "^2.0.4",
+    "framer-motion": "^2.6.13",
     "gray-matter": "^4.0.2",
     "markdown-it": "^11.0.0",
     "markdown-it-toc-and-anchor": "^4.2.0",

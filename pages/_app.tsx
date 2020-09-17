@@ -1,13 +1,13 @@
-import { AppProps } from "next/app";
+import { AppProps, Container } from "next/app";
 import React from "react";
 import "src/app.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <React.StrictMode>
-      <main id="root">
+      <Container id="root">
         <Component {...pageProps} />
-      </main>
+      </Container>
     </React.StrictMode>
   );
 }

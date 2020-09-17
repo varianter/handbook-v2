@@ -8,12 +8,12 @@ export type HandbookData = {
   name: string;
   title: string;
   content: string | null;
+  subHeadings: string[];
 };
 
 export type HandbookProps = {
   handbooks: HandbookData[];
   content?: string;
-  subHeadings: string[];
 };
 
 export const getHandbookFiles = async () => {
@@ -42,11 +42,16 @@ export const getHandbookData = async (
       }) as { level: number; content: string }[];
 
       const title = headlines.length > 0 ? headlines[0].content : "";
+      const subHeadings = getHeadlines(matterFile.content, {
+        minLevel: 2,
+        maxLevel: 2,
+      }) as { level: number; content: string }[];
       return {
         data: matterFile.data,
         name: fileName.replace(".md", ""),
         title,
         content: includeContent ? matterFile.content : null,
+        subHeadings: subHeadings.map((sh) => sh.content),
       };
     })
   );
@@ -60,14 +65,8 @@ export const getHandbookProps = async (
 
   const { content } = await getMatterFile(`${handbook}.md`);
 
-  const subHeadings = getHeadlines(content, {
-    minLevel: 2,
-    maxLevel: 2,
-  }) as { level: number; content: string }[];
-
   return {
     handbooks,
     content,
-    subHeadings: subHeadings.map((sh) => sh.content),
   };
 };

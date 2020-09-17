@@ -6,9 +6,9 @@ import Book from "src/components/book";
 
 const IndexPage: NextPage<InferGetStaticPropsType<
   typeof getStaticProps
->> = React.memo(({ handbooks, content = "", subHeadings }) => {
+>> = React.memo(({ handbooks, content = "" }) => {
   return (
-    <Layout handbooks={handbooks} subHeadings={subHeadings}>
+    <Layout handbooks={handbooks}>
       <Book content={content} />
     </Layout>
   );

@@ -22,6 +22,10 @@ body,
   position: relative;
 }
 
+html {
+  font-size: 16px;
+}
+
 .illustration {
   width: 20rem;
   margin: 5rem 2rem 2rem;
@@ -45,6 +49,9 @@ body,
 
 .illustration--headquarter {
   top: 1rem;
+}
+svg {
+  display: inline-block;
 }
 
 .handbook > h1:first-child {
