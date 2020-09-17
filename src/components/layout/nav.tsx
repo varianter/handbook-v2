@@ -32,6 +32,11 @@ const Nav = ({ handbooks, subHeadings = [], currentSearch = "" }: NavProps) => {
     setNavActive(false);
   };
 
+  const navStates = {
+    open: { transform: "translateY(0%)" },
+    closed: { transform: "translateY(94%) " },
+  };
+
   return (
     <header className={style.header}>
       {/* <button
@@ -49,8 +54,19 @@ const Nav = ({ handbooks, subHeadings = [], currentSearch = "" }: NavProps) => {
           <img src={require("./variant-bw.svg")} alt="Variant" />
         </a>
       </Link> */}
-      <nav className={style.nav}>
-        <div> Meny </div>
+      <motion.nav
+        className={style.nav}
+        variants={navStates}
+        animate={navActive ? "open" : "closed"}
+      >
+        <div
+          onClick={() => {
+            setNavActive(!navActive);
+          }}
+        >
+          {" "}
+          Meny{" "}
+        </div>
         <AnimateSharedLayout>
           <ul className={style.nav__list}>
             {handbooks.map((handbook) => (
@@ -61,8 +77,15 @@ const Nav = ({ handbooks, subHeadings = [], currentSearch = "" }: NavProps) => {
             ))}
           </ul>
         </AnimateSharedLayout>
-        <div> Lukk </div>
-        {/* <form
+        <div
+          onClick={() => {
+            setNavActive(!navActive);
+          }}
+        >
+          Lukk{" "}
+        </div>
+      </motion.nav>
+      {/* <form
           className={style.nav__inner__searchform}
           onSubmit={(e) => {
             e.preventDefault();
@@ -75,7 +98,6 @@ const Nav = ({ handbooks, subHeadings = [], currentSearch = "" }: NavProps) => {
           />
           <button type="submit">Søk</button>
         </form> */}
-      </nav>
     </header>
   );
 };

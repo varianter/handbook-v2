@@ -17,7 +17,8 @@
 .nav {
   grid-area: list;
   max-height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
+  background: var(--color-secondary2__tint3);
 }
 
 .nav__list {

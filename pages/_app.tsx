@@ -5,9 +5,9 @@ import "src/app.css";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <React.StrictMode>
-      <Container id="root">
+      <main id="root">
         <Component {...pageProps} />
-      </Container>
+      </main>
     </React.StrictMode>
   );
 }

@@ -12,6 +12,7 @@
   padding-bottom: 5rem;
   flex-grow: 1;
   box-sizing: border-box;
+  position: absolute;
 }
 
 .header {
