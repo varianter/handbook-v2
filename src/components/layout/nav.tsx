@@ -112,13 +112,24 @@ const HandbookLink = ({
   const [open, setOpen] = useState(isActive);
 
   const listStates = {
-    open: { height: "auto" },
-    collapsed: { height: 0 },
+    open: {
+      height: "auto",
+      transition: { staggerChildren: 0.07, delayChildren: 0.2 },
+    },
+    collapsed: {
+      height: 0,
+      transition: { staggerChildren: 0.05, staggerDirection: -1 },
+    },
   };
 
   const arrowStates = {
     open: { transform: "rotate(0deg)" },
     collapsed: { transform: "rotate(-90deg)" },
+  };
+
+  const itemStates = {
+    open: { y: "10px" },
+    collapsed: { y: "-10px" },
   };
 
   // const motionChild = {
@@ -186,11 +197,17 @@ const HandbookLink = ({
             .toLowerCase()}`;
 
           return (
-            <li key={heading} className={style.nav__list_item}>
+            <motion.li
+              variants={itemStates}
+              animate={open ? "open" : "collapsed"}
+              initial={open ? "open" : "collapsed"}
+              key={heading}
+              className={style.nav__list_item}
+            >
               <Link scroll={false} href="/[heading]" as={hash}>
                 <a className={style.nav__link}>{heading}</a>
               </Link>
-            </li>
+            </motion.li>
           );
         })}
       </motion.ul>
