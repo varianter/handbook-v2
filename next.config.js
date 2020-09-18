@@ -14,14 +14,17 @@ const regexEqual = (x, y) => {
 
 module.exports = withPlugins([withImages], {
   target: "serverless",
+  devIndicators: {
+    autoPrerender: false,
+  },
   redirects: async () => {
     return [
       {
-        source: "/:slug*.html",  // Old url with .html
+        source: "/:slug*.html", // Old url with .html
         destination: "/:slug*", // Redirect without .html
-        permanent: true
-      }
-    ]
+        permanent: true,
+      },
+    ];
   },
   webpack: (config) => {
     const oneOf = config.module.rules.find(

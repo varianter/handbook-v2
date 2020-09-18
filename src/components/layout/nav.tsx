@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import style from "./nav.module.css";
-import { motion, AnimateSharedLayout, useCycle } from "framer-motion";
+import { motion, AnimateSharedLayout, Variants } from "framer-motion";
 import { HandbookData } from "src/utils";
 
 export const and = (...classes: string[]) => classes.join(" ");
@@ -44,7 +44,7 @@ const Nav = ({ handbooks, currentSearch = "" }: NavProps) => {
       transform: "translateY(0%)",
     },
     closed: {
-      transform: "translateY(100%) ",
+      transform: "translateY(100%)",
       //transition: { type: "spring", stiffness: 20, restDelta: 2 },
     },
   };
@@ -54,11 +54,41 @@ const Nav = ({ handbooks, currentSearch = "" }: NavProps) => {
     open: { x: "-50%", y: "50%" },
   };
   const bottomBlobStates = {
-    open: { x: "-50%", y: "-50%" },
-    closed: { x: "-50%", y: "-30%" },
+    open: {
+      transform:
+        "rotate(10deg) translateX(-50%) translateY(-50%) translateZ(0px)",
+    },
+    closed: {
+      transform: "rotate(10deg) translateX(0%) translateY(-6%) translateZ(0px)",
+    },
+  };
+  const headerStates = {
+    closed: {
+      backgroundImage: `
+linear-gradient(
+    45deg,
+    rgb(241, 237, 223, 0),
+    rgb(244, 241, 231, 0)
+  )
+      `,
+    },
+    open: {
+      backgroundImage: `
+linear-gradient(
+    45deg,
+    rgb(241, 237, 223, 0.8),
+    rgb(244, 241, 231, 1)
+  )
+      `,
+    },
   };
   return (
-    <header className={style.header}>
+    <motion.header
+      variants={headerStates}
+      animate={navActive ? "open" : "closed"}
+      initial={"closed"}
+      className={style.header}
+    >
       <motion.div
         className={style.blob__top}
         animate={navActive ? "open" : "closed"}
@@ -94,7 +124,7 @@ const Nav = ({ handbooks, currentSearch = "" }: NavProps) => {
         >
           <path
             d="M548.925 101.226C637.058 132.933 752.015 154.857 783.562 242.892C814.77 329.979 743.724 421.185 690.716 496.901C646.808 559.62 584.139 607.138 511.461 631.564C449.35 652.439 384.961 614.325 319.802 621.561C231.374 631.381 139.281 732.028 66.3632 680.992C-4.36735 631.488 57.558 515.034 45.6623 429.689C35.6928 358.163 -9.25396 293.98 2.49328 222.761C16.0675 140.465 37.4577 36.2126 115.482 6.39654C195.93 -24.3459 269.894 69.964 354.118 88.3906C419.296 102.65 486.142 78.6381 548.925 101.226Z"
-            fill="#FBFAF7"
+            fill="#9AF0E8"
           />
         </svg>
       </motion.div>
@@ -167,7 +197,7 @@ const Nav = ({ handbooks, currentSearch = "" }: NavProps) => {
           />
           <button type="submit">Søk</button>
         </form> */}
-    </header>
+    </motion.header>
   );
 };
 
@@ -180,7 +210,7 @@ const HandbookLink = ({
   isActive: boolean;
   toggleActive: () => void;
 }) => {
-  const listStates = {
+  const listStates: Variants = {
     open: {
       height: "auto",
       transition: {
@@ -194,14 +224,14 @@ const HandbookLink = ({
     },
   };
 
-  const arrowStates = {
+  const arrowStates: Variants = {
     open: { transform: "rotate(0deg)" },
     collapsed: { transform: "rotate(-90deg)" },
   };
 
-  const itemStates = {
-    open: { y: "0px", opacity: 1 },
-    collapsed: { y: "0px", opacity: 0 },
+  const itemStates: Variants = {
+    open: { y: "0px", opacity: 1, pointerEvents: "unset" },
+    collapsed: { y: "0px", opacity: 0, pointerEvents: "none" },
   };
 
   // const motionChild = {

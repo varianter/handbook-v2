@@ -14,8 +14,8 @@
     /* ". ." */ ". list";
   background-image: linear-gradient(
     45deg,
-    #f1eddfc2,
-    var(--color-secondary4__tint3)
+    rgb(241, 237, 223),
+    rgb(244, 241, 231)
   );
 }
 
@@ -126,12 +126,10 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translate(-50%, -0%);
-  transform: translate(-50%, -30%);
+  transform: rotate(10deg) translateX(-6%) translateY(-6%) translateZ(0px);
 }
 
-.svg__top,
-.svg__bottom {
+.svg__top {
   width: 200%;
   animation-duration: 150s;
   animation-name: ROTARY;
