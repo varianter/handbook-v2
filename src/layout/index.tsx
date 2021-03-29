@@ -124,6 +124,85 @@ const Layout: React.FC<LayoutProps> = ({
       <section className={style.content}>{children}</section>
 
       <BackgroundBlobs />
+
+      <footer className={style.footer}>
+        <div className={style.footer__inner}>
+          <ul className={style.footer__social}>
+            <li>
+              <a
+                href="https://blog.variant.no"
+                title="Variant Blogg"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/medium.svg")}
+                  alt="Variant på Medium.com"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://twitter.com/variant_as"
+                title="Variant på Twitter"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/twitter.svg")}
+                  alt="Variant på Twitter"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/varianter"
+                title="Variant på Github"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/github.svg")}
+                  alt="Variant på Github"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://instagram.com/variant_as"
+                title="Variant på Instagram"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/instagram.svg")}
+                  alt="Variant på Instagram"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://fb.me/varianter"
+                title="Variant på Facebook"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/facebook.svg")}
+                  alt="Variant på Facebook"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.linkedin.com/company/variant-as/"
+                title="Variant på LinkedIn"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/linkedin.svg")}
+                  alt="Variant på LinkedIn"
+                />
+              </a>
+            </li>
+          </ul>
+        </div>
+      </footer>
     </div>
   );
 };
