@@ -4,12 +4,12 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import BackgroundBlobs from "src/background";
-import { Divide as Hamburger } from "hamburger-react";
 import SearchForm from "src/components/search-form";
 
 const title = "Variant Håndbok";
 
-export const and = (...classes: string[]) => classes.join(" ");
+export const and = (...classes: (string | undefined)[]) =>
+  classes.filter(Boolean).join(" ");
 const isActiveHandbook = (handbookName: string, asPath: string) => {
   if (asPath === "/" && handbookName === "handbook") return true;
   return `/${handbookName}` === asPath;
@@ -51,23 +51,26 @@ const Layout: React.FC<LayoutProps> = ({
         <meta name="twitter:site" content="@variant_as" />
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.variant.no/" />
+        <meta property="og:url" content="https://handbook.variant.no/" />
         <meta
           property="og:image"
           content="https://www.variant.no/og-header-min.png"
         />
       </Head>
       <header className={style.header}>
-        <a href="/" className={style.header__logo}>
-          <img src={require("./variant-bw.svg")} alt="Variant" />
-        </a>
+        <Link href="/">
+          <a className={style.header__logo}>
+            <img src={require("./variant-bw.svg")} alt="Variant" />
+          </a>
+        </Link>
 
         <div className={style.burgerButtonContainer}>
+          <span hidden id="menu-label">
+            Hovedmeny
+          </span>
           <Hamburger
-            aria-labelledby="menu-label"
-            aria-expanded={isMenuVisible}
-            onToggle={() => setMenuVisible(!isMenuVisible)}
-            toggled={isMenuVisible}
+            onClick={() => setMenuVisible(!isMenuVisible)}
+            isOpen={isMenuVisible}
           />
         </div>
       </header>
@@ -151,10 +154,10 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
         return;
       }
       if (!e.target || !modalRef.current?.contains(e.target as Node)) {
-        setMenuVisible(false);
+        return setMenuVisible(false);
       }
       if ((e.target as Node).nodeName === "A") {
-        setMenuVisible(false);
+        return setMenuVisible(false);
       }
     };
     document.body.addEventListener("click", handleClickOutside);
@@ -205,6 +208,7 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
         return;
       }
       if (e.key === "Escape") {
+        console.log("escape");
         return setMenuVisible(false);
       }
       if (e.key === "Tab") {
@@ -220,4 +224,30 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
     setMenuVisible,
     tabIndex,
   };
+}
+
+function Hamburger({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={and(
+        style.hamburger,
+        isOpen ? style.hamburger__open : undefined
+      )}
+      type="button"
+      aria-labelledby="menu-label"
+      aria-expanded={isOpen}
+      onClick={onClick}
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  );
 }

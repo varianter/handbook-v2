@@ -6,14 +6,15 @@
   flex: 1;
   font-size: 16px;
   padding: 0.5rem 1rem;
+  border: 0;
 }
 
 .searchform button {
   border: none;
-  background: var(--color-secondary1);
+  background: var(--color-primary);
   text-align: center;
   font-size: 16px;
   padding: 0.5rem 1.5rem;
-  color: var(--color-secondary1--text);
+  color: var(--color-primary--text);
   font-weight: 500;
 }
