@@ -1,19 +1,22 @@
-import { NextPage, InferGetServerSidePropsType } from "next";
-import Layout from "src/layout";
-import { getServerSideProps } from "pages/search";
-import useSWR from "swr";
-import { SearchResult } from "pages/api/search";
-import style from "./search.module.css";
+import { InferGetServerSidePropsType, NextPage } from "next";
 import { useRouter } from "next/router";
-import Book from "src/components/book";
+import { SearchResult } from "pages/api/search";
+import { getServerSideProps } from "pages/search";
+import React from "react";
+import { BookSummary } from "src/components/book";
+import SearchForm from "src/components/search-form";
+import Layout from "src/layout";
+import useSWR from "swr";
+import style from "./search.module.css";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSearch(searchQuery: string) {
   const { data, error } = useSWR<SearchResult[]>(
-    () => (searchQuery.length > 3 ? `/api/search?q=${searchQuery}` : null),
+    `/api/search?q=${searchQuery}`,
     fetcher
   );
+
   return {
     results: data,
     isLoading: !error && !data,
@@ -34,7 +37,11 @@ const SearchPage: NextPage<InferGetServerSidePropsType<
 
   return (
     <Layout handbooks={handbooks} currentSearch={queryString}>
-      {isLoading ? <div>Loading...</div> : null}
+      <div className={style.searchFormContainer}>
+        <SearchForm currentSearch={queryString} />
+      </div>
+
+      {isLoading ? <div>Søker...</div> : null}
       {!isLoading && !isError ? <SearchResultsList results={results} /> : null}
       {!isLoading && isError ? <p>isError</p> : null}
     </Layout>
@@ -46,23 +53,34 @@ export default SearchPage;
 const SearchResultsList = ({ results }: { results?: SearchResult[] }) => {
   return (
     <section className={style.searchResults}>
-      <h1>Søkeresultater</h1>
+      <h1>Søkeresultater ({results?.length ?? 0})</h1>
+
       {results && results.length !== 0 ? (
         results.map((result, idx) => {
           return (
-            <div className={style.searchResult} key={idx}>
-              <a className={style.searchResult__link} href={result.link}>
-                {result.header}
-              </a>
-              <p className={style.searchResult__handbookTitle}>
-                {result.handbookTitle}
-              </p>
-              <Book content={result.content}></Book>
-            </div>
+            <article className={style.searchResult} key={idx}>
+              <header className={style.searchResult__header}>
+                <h3>
+                  <a href={result.link} className={style.searchResult__link}>
+                    {result.header}
+                  </a>
+                </h3>
+                <p className={style.searchResult__handbookTitle}>
+                  {result.handbookTitle}
+                </p>
+              </header>
+
+              <BookSummary
+                content={result.content}
+                filename={result.handbookName + ".md"}
+              />
+            </article>
           );
         })
       ) : (
-        <p>Vi fant ingenting, desverre! 😭</p>
+        <p>
+          Vi fant ingenting, desverre! 😭 Kan være du må søke med flere tegn.
+        </p>
       )}
     </section>
   );

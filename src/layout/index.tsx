@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import BackgroundBlobs from "src/background";
 import { Divide as Hamburger } from "hamburger-react";
+import SearchForm from "src/components/search-form";
 
 const title = "Variant Håndbok";
 
@@ -28,7 +29,6 @@ const Layout: React.FC<LayoutProps> = ({
   handbooks,
   children,
 }) => {
-  const [searchQuery, setSearchQuery] = useState(currentSearch);
   const modalRef = React.createRef<HTMLDivElement>();
   const closeRef = React.createRef<HTMLButtonElement>();
 
@@ -39,15 +39,6 @@ const Layout: React.FC<LayoutProps> = ({
 
   const router = useRouter();
   const asPath = router.asPath;
-
-  const performSearch = () => {
-    if (searchQuery.length < 3) return;
-
-    router.push({
-      pathname: "/search",
-      query: { q: encodeURIComponent(searchQuery) },
-    });
-  };
 
   return (
     <div className={style.main}>
@@ -75,7 +66,8 @@ const Layout: React.FC<LayoutProps> = ({
           <Hamburger
             aria-labelledby="menu-label"
             aria-expanded={isMenuVisible}
-            onToggle={setMenuVisible}
+            onToggle={() => setMenuVisible(!isMenuVisible)}
+            toggled={isMenuVisible}
           />
         </div>
       </header>
@@ -124,20 +116,7 @@ const Layout: React.FC<LayoutProps> = ({
           ) : null}
         </section>
 
-        <form
-          className={style.nav__inner__searchform}
-          onSubmit={(e) => {
-            e.preventDefault();
-            performSearch();
-          }}
-        >
-          <input
-            defaultValue={searchQuery}
-            placeholder="Søk etter noe..."
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit">Søk</button>
-        </form>
+        <SearchForm currentSearch={currentSearch} />
       </nav>
       <section className={style.content}>{children}</section>
 

@@ -14,6 +14,7 @@ export type HandbookProps = {
   handbooks: HandbookData[];
   content?: string;
   subHeadings: string[];
+  filename: string;
 };
 
 export const getHandbookFiles = async () => {
@@ -57,8 +58,10 @@ export const getHandbookProps = async (
   handbook = "handbook"
 ): Promise<HandbookProps> => {
   const handbooks = await getHandbookData();
+  const filename = `${handbook}.md`;
+  console.log(filename);
 
-  const { content } = await getMatterFile(`${handbook}.md`);
+  const { content } = await getMatterFile(filename);
 
   const subHeadings = getHeadlines(content, {
     minLevel: 2,
@@ -69,5 +72,6 @@ export const getHandbookProps = async (
     handbooks,
     content,
     subHeadings: subHeadings.map((sh) => sh.content),
+    filename,
   };
 };

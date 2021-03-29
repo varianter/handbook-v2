@@ -6,10 +6,10 @@ import Book from "src/components/book";
 
 const IndexPage: NextPage<InferGetStaticPropsType<
   typeof getStaticProps
->> = React.memo(({ handbooks, content = "", subHeadings }) => {
+>> = React.memo(({ handbooks, content = "", subHeadings, filename }) => {
   return (
     <Layout handbooks={handbooks} subHeadings={subHeadings}>
-      <Book content={content} />
+      <Book content={content} filename={filename} />
     </Layout>
   );
 });

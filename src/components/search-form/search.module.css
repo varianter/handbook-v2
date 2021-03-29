@@ -1,0 +1,19 @@
+.searchform {
+  display: flex;
+  width: 100%;
+}
+.searchform input {
+  flex: 1;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+}
+
+.searchform button {
+  border: none;
+  background: var(--color-secondary1);
+  text-align: center;
+  font-size: 16px;
+  padding: 0.5rem 1.5rem;
+  color: var(--color-secondary1--text);
+  font-weight: 500;
+}
