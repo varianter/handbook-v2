@@ -1,5 +1,7 @@
 .main {
+  position: relative;
   overflow-x: hidden;
+  width: 100%;
 }
 
 .content {
@@ -15,16 +17,18 @@
 }
 
 .header {
-  display: none;
+  display: flex;
   flex-wrap: wrap;
   background-color: #ede8d7;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+
+  position: fixed;
+  width: 100%;
+  z-index: 100;
 }
 
-.header__logo {
-  position: absolute;
-  right: 1.35rem;
-  top: 1.35rem;
-}
 .header__logo img {
   display: block;
   height: 0.9rem;
@@ -76,38 +80,40 @@
 }
 
 .nav {
-  max-width: 20rem;
-  min-width: 20rem;
+  width: 20rem;
 
   background-color: #ede8d7;
 
-  height: 100vh;
   height: -webkit-fill-available;
   position: fixed;
   overflow-y: auto;
+
+  right: 0;
+
+  z-index: 50;
+  padding-top: 3rem;
+
+  transform: translateX(100%);
+  transition: transform 450ms ease-in-out;
 }
 
-@media (max-width: 600px) {
-  .nav {
-    transform: translateX(-100%);
-    transition: transform 450ms ease-in-out;
-  }
+.nav li {
+  margin: 0;
+}
 
-  .nav__active {
-    transform: translateX(0);
-    transition: transform 450ms ease-in-out;
+.nav__active {
+  transform: translateX(0);
+  transition: transform 450ms ease-in-out;
 
-    width: 100%;
-    max-width: none;
-  }
+  max-width: none;
+}
 
-  .header {
-    display: flex;
-  }
+.header {
+  display: flex;
+}
 
-  .content {
-    margin-left: auto;
-  }
+.content {
+  margin: 3rem auto;
 }
 
 .nav__inner {
@@ -124,7 +130,9 @@
   display: block;
 }
 .nav__logo img {
-  height: 4rem;
+  height: 2rem;
+  display: block;
+  margin: auto;
 }
 .nav__inner p {
   font-weight: 500;
@@ -176,26 +184,4 @@
   color: var(--color-secondary1--text);
   border-radius: 0.5rem;
   font-weight: 500;
-}
-
-.footer {
-  position: fixed;
-  display: flex;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: var(--color-standard__black);
-  color: var(--color-standard__white);
-  font-size: 0.875rem;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  height: 4rem;
-}
-
-.footer a {
-  margin-left: 0.5rem;
-  color: var(--color-standard__white);
-  text-decoration: none;
-  border-bottom: 2px solid var(--color-secondary2__tint3);
 }

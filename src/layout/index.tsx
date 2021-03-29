@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import style from "./layout.module.css";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 const title = "Variant Håndbok";
@@ -26,27 +27,17 @@ const Layout: React.FC<LayoutProps> = ({
   children,
 }) => {
   const [searchQuery, setSearchQuery] = useState(currentSearch);
-  const [navActive, setNavActive] = useState(false);
-  const [screenWidth, setScreenWidth] = useState(0);
-  useEffect(() => {
-    setScreenWidth(window.innerWidth);
-    let timeoutId: any = null;
-    const setWindowSize = () => {
-      clearTimeout(timeoutId);
+  const modalRef = React.createRef<HTMLDivElement>();
+  const navRef = React.createRef<HTMLUListElement>();
+  const closeRef = React.createRef<HTMLButtonElement>();
 
-      timeoutId = setTimeout(() => setScreenWidth(window.innerWidth), 100);
-    };
-
-    window.addEventListener("resize", setWindowSize);
-    return () => {
-      window.removeEventListener("resize", setWindowSize);
-    };
-  }, []);
-
-  const isSmall = screenWidth < 600;
+  const { isMenuVisible, setMenuVisible, tabIndex } = useTogglableBurgerMenu(
+    modalRef,
+    navRef,
+    closeRef
+  );
 
   const router = useRouter();
-
   const asPath = router.asPath;
 
   const performSearch = () => {
@@ -56,15 +47,12 @@ const Layout: React.FC<LayoutProps> = ({
       pathname: "/search",
       query: { q: encodeURIComponent(searchQuery) },
     });
-    setNavActive(false);
   };
 
   return (
     <div
       className={style.main}
-      style={
-        navActive && isSmall ? { position: "fixed" } : { position: "relative" }
-      }
+      style={isMenuVisible ? { position: "fixed" } : { position: "relative" }}
     >
       <Head>
         <title>{title}</title>
@@ -81,40 +69,36 @@ const Layout: React.FC<LayoutProps> = ({
           content="https://www.variant.no/og-header-min.png"
         />
       </Head>
-      {isSmall ? (
-        <header className={style.header}>
-          <button
-            className={style.burgerButtonContainer}
-            id="hamburger"
-            aria-labelledby="menu-label"
-            aria-expanded={navActive}
-            onClick={() => setNavActive(!navActive)}
-          >
-            <div
-              className={and(style.bar1, navActive ? style.bar1_change : "")}
-            />
-            <div
-              className={and(style.bar2, navActive ? style.bar2_change : "")}
-            />
-            <div
-              className={and(style.bar3, navActive ? style.bar3_change : "")}
-            />
-          </button>
-          <a href="/" className={style.header__logo}>
-            <img src={require("./variant-bw.svg")} alt="Variant" />
-          </a>
-        </header>
-      ) : null}
-      <nav className={and(style.nav, navActive ? style.nav__active : " ")}>
+      <header className={style.header}>
+        <a href="/" className={style.header__logo}>
+          <img src={require("./variant-bw.svg")} alt="Variant" />
+        </a>
+
+        <button
+          className={style.burgerButtonContainer}
+          aria-labelledby="menu-label"
+          aria-expanded={isMenuVisible}
+          onClick={() => setMenuVisible(!isMenuVisible)}
+          ref={closeRef}
+        >
+          <div
+            className={and(style.bar1, isMenuVisible ? style.bar1_change : "")}
+          />
+          <div
+            className={and(style.bar2, isMenuVisible ? style.bar2_change : "")}
+          />
+          <div
+            className={and(style.bar3, isMenuVisible ? style.bar3_change : "")}
+          />
+        </button>
+      </header>
+
+      <nav
+        className={and(style.nav, isMenuVisible ? style.nav__active : " ")}
+        ref={modalRef}
+      >
         <section className={style.nav__inner}>
-          {!isSmall ? (
-            <a href="/" className={style.nav__logo}>
-              <img src={require("./variant.svg")} alt="Variant" />
-            </a>
-          ) : (
-            <p>Håndbøker</p>
-          )}
-          <ul className={style.nav__handbooks}>
+          <ul className={style.nav__handbooks} ref={navRef}>
             {handbooks.map((handbook) => {
               return (
                 <li
@@ -125,19 +109,9 @@ const Layout: React.FC<LayoutProps> = ({
                       : style.nav__inner__link
                   }
                 >
-                  <a
-                    onClick={() => {
-                      router.push({
-                        href: "/[handbook]",
-                        pathname: handbook.name.toString(),
-                      });
-                      if (navActive) {
-                        setNavActive(false);
-                      }
-                    }}
-                  >
-                    {handbook.title}
-                  </a>
+                  <Link href={`/${handbook.name.toString()}`}>
+                    <a tabIndex={tabIndex}>{handbook.title}</a>
+                  </Link>
                 </li>
               );
             })}
@@ -150,12 +124,8 @@ const Layout: React.FC<LayoutProps> = ({
                   return (
                     <li key={heading} className={style.nav__inner__link}>
                       <a
-                        onClick={() => {
-                          if (navActive) {
-                            setNavActive(false);
-                          }
-                        }}
                         href={`#${heading.replace(/ /g, "-").toLowerCase()}`}
+                        tabIndex={tabIndex}
                       >
                         {heading}
                       </a>
@@ -181,14 +151,108 @@ const Layout: React.FC<LayoutProps> = ({
         </section>
       </nav>
       <section className={style.content}>{children}</section>
-      <footer className={style.footer}>
-        Ser du noe som burde endres?
-        <a href="https://github.com/varianter/handbook">
-          Send oss en oppdatering.
-        </a>
-      </footer>
     </div>
   );
 };
 
 export default Layout;
+
+function useTogglableBurgerMenu<
+  T extends HTMLElement,
+  U extends HTMLElement,
+  R extends HTMLElement
+>(
+  modalRef: React.RefObject<T>,
+  ulRef: React.RefObject<U>,
+  closeButton: React.RefObject<R>
+) {
+  const [isMenuVisible, setMenuVisible] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  useEffect(() => {
+    setTabIndex(isMenuVisible ? 0 : -1);
+
+    // Avoid scrolling when menu is visible.
+    if (isMenuVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "initial";
+    }
+  }, [isMenuVisible]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!isMenuVisible || closeButton.current?.contains(e.target as Node)) {
+        return;
+      }
+      if (!e.target || !ulRef.current?.contains(e.target as Node)) {
+        setMenuVisible(false);
+      }
+      if ((e.target as Node).nodeName === "A") {
+        setMenuVisible(false);
+      }
+    };
+    document.body.addEventListener("click", handleClickOutside);
+    return () => document.body.removeEventListener("click", handleClickOutside);
+  }, [isMenuVisible, modalRef, closeButton, ulRef]);
+
+  const handleTabKey = useCallback(
+    (e: KeyboardEvent) => {
+      const focusableModalElements =
+        modalRef.current?.querySelectorAll<HTMLElement>(
+          '[role="button"],a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+        ) ?? [];
+      const allFocusables =
+        document.querySelectorAll<HTMLElement>(
+          '[role="button"],a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+        ) ?? [];
+
+      const first = focusableModalElements[0];
+      const last = focusableModalElements[focusableModalElements.length - 1];
+      const next =
+        Array.from(allFocusables).find(
+          (_, i) => allFocusables[i - 1] === document.activeElement
+        ) ?? null;
+      const previous =
+        Array.from(allFocusables).find(
+          (_, i) => allFocusables[i + 1] === document.activeElement
+        ) ?? null;
+
+      // On normal tabbing. If next element is outside modal, jump to first element
+      if (!e.shiftKey && !modalRef.current?.contains(next)) {
+        first?.focus();
+        return e.preventDefault();
+      }
+
+      // On "reversed" tabbing. If previous element is outside modal, jump to last element
+      if (e.shiftKey && !modalRef.current?.contains(previous)) {
+        last?.focus();
+        return e.preventDefault();
+      }
+
+      // Not start or end, follow normal tab flow.
+    },
+    [modalRef]
+  );
+  useEffect(() => {
+    function keyListener(e: KeyboardEvent) {
+      if (!isMenuVisible) {
+        return;
+      }
+      if (e.key === "Escape") {
+        return setMenuVisible(false);
+      }
+      if (e.key === "Tab") {
+        return handleTabKey(e);
+      }
+    }
+    document.addEventListener("keydown", keyListener);
+    return () => document.removeEventListener("keydown", keyListener);
+  }, [isMenuVisible, handleTabKey]);
+
+  return {
+    isMenuVisible,
+    setMenuVisible,
+    tabIndex,
+  };
+}
