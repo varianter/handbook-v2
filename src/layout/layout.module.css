@@ -5,12 +5,11 @@
 }
 
 .content {
-  max-width: 50rem;
+  max-width: 45rem;
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  margin: 0 auto;
-  margin-left: 21rem;
-  padding: 0.5rem;
+  margin: 5rem auto;
+  padding: 1rem;
   padding-bottom: 5rem;
   flex-grow: 1;
   box-sizing: border-box;
@@ -19,82 +18,54 @@
 .header {
   display: flex;
   flex-wrap: wrap;
-  background-color: #ede8d7;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
 
-  position: fixed;
   width: 100%;
-  z-index: 100;
 }
 
 .header__logo img {
   display: block;
   height: 0.9rem;
+  margin: 1rem 0;
 }
 
 .burgerButtonContainer {
-  background-color: transparent;
-  border: 0;
-  font-size: 1.2rem;
+  position: fixed;
   cursor: pointer;
 
   margin-top: 1rem;
   margin-bottom: 1rem;
   margin-left: 0.5rem;
-}
-
-.burgerButtonContainer:focus {
-  outline: none;
-  box-shadow: 0 0 0 0.15rem rgba(21, 156, 228, 0.4);
-}
-
-.bar1,
-.bar2,
-.bar3 {
-  position: relative;
-  width: 1.8rem;
-  height: 0.2rem;
-  background-color: var(--color-secondary1);
-  margin: 0.29rem 0;
-  transition: 0.3s;
-}
-
-.bar1_change,
-.bar2_change,
-.bar3_change {
-  composes: bar1;
-}
-
-.bar1_change {
-  -webkit-transform: rotate(-45deg) translate(-0.35rem, 0.35rem);
-  transform: rotate(-45deg) translate(-0.35rem, 0.35rem);
-}
-.bar2_change {
-  opacity: 0;
-}
-.bar3_change {
-  -webkit-transform: rotate(45deg) translate(-0.35rem, -0.35rem);
-  transform: rotate(45deg) translate(-0.35rem, -0.35rem);
+  right: 1rem;
+  z-index: 100;
 }
 
 .nav {
   width: 20rem;
 
   background-color: #ede8d7;
+  position: fixed;
 
   height: -webkit-fill-available;
-  position: fixed;
-  overflow-y: auto;
 
   right: 0;
+  top: 0;
 
   z-index: 50;
-  padding-top: 3rem;
 
   transform: translateX(100%);
   transition: transform 450ms ease-in-out;
+
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .nav {
+    width: 100%;
+  }
 }
 
 .nav li {
@@ -108,14 +79,6 @@
   max-width: none;
 }
 
-.header {
-  display: flex;
-}
-
-.content {
-  margin: 3rem auto;
-}
-
 .nav__inner {
   position: sticky;
   top: 0;
@@ -125,15 +88,6 @@
   font-size: 1.2rem;
 }
 
-.nav__logo {
-  padding: 1.5rem 0rem 1rem;
-  display: block;
-}
-.nav__logo img {
-  height: 2rem;
-  display: block;
-  margin: auto;
-}
 .nav__inner p {
   font-weight: 500;
   font-size: 1.5rem;
@@ -171,17 +125,20 @@
 
 .nav__inner__searchform {
   display: flex;
-  margin-bottom: 3rem;
+  width: 100%;
+}
+.nav__inner__searchform input {
+  flex: 1;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
 }
 
 .nav__inner__searchform button {
-  margin-left: 0.5rem;
   border: none;
   background: var(--color-secondary1);
   text-align: center;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
+  font-size: 16px;
+  padding: 0.5rem 1.5rem;
   color: var(--color-secondary1--text);
-  border-radius: 0.5rem;
   font-weight: 500;
 }

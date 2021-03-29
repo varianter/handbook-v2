@@ -3,6 +3,8 @@ import style from "./layout.module.css";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import BackgroundBlobs from "src/background";
+import { Divide as Hamburger } from "hamburger-react";
 
 const title = "Variant Håndbok";
 
@@ -28,12 +30,10 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState(currentSearch);
   const modalRef = React.createRef<HTMLDivElement>();
-  const navRef = React.createRef<HTMLUListElement>();
   const closeRef = React.createRef<HTMLButtonElement>();
 
   const { isMenuVisible, setMenuVisible, tabIndex } = useTogglableBurgerMenu(
     modalRef,
-    navRef,
     closeRef
   );
 
@@ -50,10 +50,7 @@ const Layout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div
-      className={style.main}
-      style={isMenuVisible ? { position: "fixed" } : { position: "relative" }}
-    >
+    <div className={style.main}>
       <Head>
         <title>{title}</title>
         <link rel="icon" href={favicon} />
@@ -74,23 +71,13 @@ const Layout: React.FC<LayoutProps> = ({
           <img src={require("./variant-bw.svg")} alt="Variant" />
         </a>
 
-        <button
-          className={style.burgerButtonContainer}
-          aria-labelledby="menu-label"
-          aria-expanded={isMenuVisible}
-          onClick={() => setMenuVisible(!isMenuVisible)}
-          ref={closeRef}
-        >
-          <div
-            className={and(style.bar1, isMenuVisible ? style.bar1_change : "")}
+        <div className={style.burgerButtonContainer}>
+          <Hamburger
+            aria-labelledby="menu-label"
+            aria-expanded={isMenuVisible}
+            onToggle={setMenuVisible}
           />
-          <div
-            className={and(style.bar2, isMenuVisible ? style.bar2_change : "")}
-          />
-          <div
-            className={and(style.bar3, isMenuVisible ? style.bar3_change : "")}
-          />
-        </button>
+        </div>
       </header>
 
       <nav
@@ -98,7 +85,7 @@ const Layout: React.FC<LayoutProps> = ({
         ref={modalRef}
       >
         <section className={style.nav__inner}>
-          <ul className={style.nav__handbooks} ref={navRef}>
+          <ul className={style.nav__handbooks}>
             {handbooks.map((handbook) => {
               return (
                 <li
@@ -135,35 +122,34 @@ const Layout: React.FC<LayoutProps> = ({
               </ul>
             </>
           ) : null}
-          <form
-            className={style.nav__inner__searchform}
-            onSubmit={(e) => {
-              e.preventDefault();
-              performSearch();
-            }}
-          >
-            <input
-              defaultValue={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit">Søk</button>
-          </form>
         </section>
+
+        <form
+          className={style.nav__inner__searchform}
+          onSubmit={(e) => {
+            e.preventDefault();
+            performSearch();
+          }}
+        >
+          <input
+            defaultValue={searchQuery}
+            placeholder="Søk etter noe..."
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit">Søk</button>
+        </form>
       </nav>
       <section className={style.content}>{children}</section>
+
+      <BackgroundBlobs />
     </div>
   );
 };
 
 export default Layout;
 
-function useTogglableBurgerMenu<
-  T extends HTMLElement,
-  U extends HTMLElement,
-  R extends HTMLElement
->(
+function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
   modalRef: React.RefObject<T>,
-  ulRef: React.RefObject<U>,
   closeButton: React.RefObject<R>
 ) {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -185,7 +171,7 @@ function useTogglableBurgerMenu<
       if (!isMenuVisible || closeButton.current?.contains(e.target as Node)) {
         return;
       }
-      if (!e.target || !ulRef.current?.contains(e.target as Node)) {
+      if (!e.target || !modalRef.current?.contains(e.target as Node)) {
         setMenuVisible(false);
       }
       if ((e.target as Node).nodeName === "A") {
@@ -194,7 +180,7 @@ function useTogglableBurgerMenu<
     };
     document.body.addEventListener("click", handleClickOutside);
     return () => document.body.removeEventListener("click", handleClickOutside);
-  }, [isMenuVisible, modalRef, closeButton, ulRef]);
+  }, [isMenuVisible, modalRef, closeButton]);
 
   const handleTabKey = useCallback(
     (e: KeyboardEvent) => {

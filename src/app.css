@@ -23,9 +23,15 @@ body,
 }
 html {
   --font-size-min: 16;
-  --font-size-max: 18;
+  --font-size-max: 20;
   background: var(--color-secondary4__tint2);
   scroll-behavior: smooth;
+}
+h1,
+h2,
+h3,
+h4 {
+  word-wrap: break-word;
 }
 h1 {
   font-size: 4rem;
@@ -33,8 +39,28 @@ h1 {
 h2 {
   font-size: 2.4rem;
 }
+h3 {
+  font-size: 2rem;
+}
 li + li {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+* + h2 {
+  margin-top: 0;
+  padding-top: 4rem;
+}
+* + h3 {
+  margin-top: 0;
+  padding-top: 3.5rem;
+}
+* + h4 {
+  margin-top: 0;
+  padding-top: 3rem;
+}
+* + h5 {
+  margin-top: 0;
+  padding-top: 2rem;
 }
 
 .illustration {
@@ -63,7 +89,7 @@ li + li {
 }
 
 .handbook > h1:first-child {
-  margin: 3rem 0;
+  margin: 4rem 0;
   background: linear-gradient(
     to right,
     var(--color-primary),
@@ -121,5 +147,22 @@ a:hover {
   }
 }
 .markdownIt-Anchor {
+  margin-left: -1.5rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: normal;
+  font-family: "Recoleta", serif;
+  opacity: 0.8;
+}
+.markdownIt-Anchor:hover {
+  opacity: 1;
+}
+@media (max-width: 600px) {
+  .markdownIt-Anchor {
+    margin-left: 0rem;
+  }
+}
+
+h1 .markdownIt-Anchor {
   display: none;
 }
