@@ -40,11 +40,6 @@
     "start": "next start",
     "export": "next export"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.ts": "eslint --cache --fix",
     "*.{ts,css,md}": "prettier --write"
