@@ -147,7 +147,7 @@
   min-height: 15rem;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   flex-wrap: wrap;
 }
 .footer__social {
