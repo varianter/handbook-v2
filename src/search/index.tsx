@@ -2,7 +2,7 @@ import { InferGetServerSidePropsType, NextPage } from "next";
 import { useRouter } from "next/router";
 import { SearchResult } from "pages/api/search";
 import { getServerSideProps } from "pages/search";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { BookSummary } from "src/components/book";
 import SearchForm from "src/components/search-form";
 import Layout from "src/layout";
@@ -18,32 +18,36 @@ function useSearch(searchQuery: string) {
   );
 
   return {
-    results: data,
-    isLoading: !error && !data,
-    isError: error,
+    results: data ?? [],
+    error,
   };
 }
 const SearchPage: NextPage<InferGetServerSidePropsType<
   typeof getServerSideProps
 >> = ({ handbooks }) => {
   const router = useRouter();
+  const searchBox = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    searchBox.current?.focus();
+  }, []);
+
   const qs = router.query.q;
   let queryString = "";
   if (qs && !Array.isArray(qs)) {
     queryString = decodeURIComponent(qs);
   }
 
-  const { results, isLoading, isError } = useSearch(queryString);
+  const { results, error } = useSearch(queryString);
 
   return (
     <Layout handbooks={handbooks} currentSearch={queryString}>
       <div className={style.searchFormContainer}>
-        <SearchForm currentSearch={queryString} />
+        <SearchForm currentSearch={queryString} autofocus />
       </div>
 
-      {isLoading ? <div>Søker...</div> : null}
-      {!isLoading && !isError ? <SearchResultsList results={results} /> : null}
-      {!isLoading && isError ? <p>isError</p> : null}
+      {!error ? <SearchResultsList results={results} /> : null}
+      {error ? <p>{error.message}</p> : null}
     </Layout>
   );
 };
