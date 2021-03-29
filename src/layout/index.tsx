@@ -208,7 +208,6 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
         return;
       }
       if (e.key === "Escape") {
-        console.log("escape");
         return setMenuVisible(false);
       }
       if (e.key === "Tab") {

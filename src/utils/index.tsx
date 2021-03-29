@@ -59,7 +59,6 @@ export const getHandbookProps = async (
 ): Promise<HandbookProps> => {
   const handbooks = await getHandbookData();
   const filename = `${handbook}.md`;
-  console.log(filename);
 
   const { content } = await getMatterFile(filename);
 

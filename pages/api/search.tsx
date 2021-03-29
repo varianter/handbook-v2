@@ -104,8 +104,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (!query || Array.isArray(query)) return [];
   const results = await doSearch(splitTrimAndLowercase(query));
 
-  console.log("søk ferdig", results);
-
   return res.status(200).json(results);
-  //
 };
