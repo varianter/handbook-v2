@@ -21,8 +21,6 @@ export default function SearchForm({
   }, [autofocus]);
 
   const performSearch = () => {
-    if (searchQuery.length < 3) return;
-
     router.push({
       pathname: "/search",
       query: { q: encodeURIComponent(searchQuery) },

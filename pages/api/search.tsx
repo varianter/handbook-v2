@@ -101,8 +101,10 @@ function splitTrimAndLowercase(str: string): string[] {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const query = req.query.q;
-  if (!query || Array.isArray(query)) return [];
-  const results = await doSearch(splitTrimAndLowercase(query));
+  if (!query || Array.isArray(query)) {
+    return res.status(200).json([]);
+  }
 
+  const results = await doSearch(splitTrimAndLowercase(query));
   return res.status(200).json(results);
 };
