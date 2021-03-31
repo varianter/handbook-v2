@@ -41,6 +41,7 @@ h2 {
 }
 h3 {
   font-size: 2rem;
+  font-family: "Recoleta", serif;
 }
 li + li {
   margin-top: 0.5rem;

@@ -209,15 +209,44 @@ const Layout: React.FC<LayoutProps> = ({
 
 export default Layout;
 
+function Hamburger({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={and(
+        style.hamburger,
+        isOpen ? style.hamburger__open : undefined
+      )}
+      type="button"
+      aria-labelledby="menu-label"
+      aria-expanded={isOpen}
+      onClick={onClick}
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  );
+}
+
 function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
   modalRef: React.RefObject<T>,
-  closeButton: React.RefObject<R>
+  closeButton: React.RefObject<R>,
+  breakpointMinWidth = "1200px"
 ) {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
+  const isNotHamburgerMode =
+    useMediaQuery(`(min-width: ${breakpointMinWidth})`) ?? true;
 
   useEffect(() => {
-    setTabIndex(isMenuVisible ? 0 : -1);
+    setTabIndex(isMenuVisible || isNotHamburgerMode ? 0 : -1);
 
     // Avoid scrolling when menu is visible.
     if (isMenuVisible) {
@@ -225,7 +254,7 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
     } else {
       document.body.style.overflow = "initial";
     }
-  }, [isMenuVisible]);
+  }, [isMenuVisible, isNotHamburgerMode]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -283,7 +312,7 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
   );
   useEffect(() => {
     function keyListener(e: KeyboardEvent) {
-      if (!isMenuVisible) {
+      if (!isMenuVisible || isNotHamburgerMode) {
         return;
       }
       if (e.key === "Escape") {
@@ -295,7 +324,7 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
     }
     document.addEventListener("keydown", keyListener);
     return () => document.removeEventListener("keydown", keyListener);
-  }, [isMenuVisible, handleTabKey]);
+  }, [isMenuVisible, isNotHamburgerMode, handleTabKey]);
 
   return {
     isMenuVisible,
@@ -304,28 +333,46 @@ function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
   };
 }
 
-function Hamburger({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      className={and(
-        style.hamburger,
-        isOpen ? style.hamburger__open : undefined
-      )}
-      type="button"
-      aria-labelledby="menu-label"
-      aria-expanded={isOpen}
-      onClick={onClick}
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  );
+function hasWindow() {
+  return typeof window !== "undefined";
+}
+
+const useMediaQuery = (mediaQuery: string) => {
+  const [isMatched, setMatched] = useState(() => {
+    if (!hasWindow()) return false;
+    return Boolean(window.matchMedia(mediaQuery).matches);
+  });
+
+  useEffect(() => {
+    if (!hasWindow()) return;
+    const mediaQueryList = window.matchMedia(mediaQuery);
+    const documentChangeHandler = () =>
+      setMatched(Boolean(mediaQueryList.matches));
+    listenTo(mediaQueryList, documentChangeHandler);
+
+    documentChangeHandler();
+    return () => removeListener(mediaQueryList, documentChangeHandler);
+  }, [mediaQuery]);
+
+  return isMatched;
+};
+
+function listenTo(
+  matcher: MediaQueryList,
+  cb: (ev: MediaQueryListEvent) => void
+) {
+  if ("addEventListener" in (matcher as any)) {
+    return matcher.addEventListener("change", cb);
+  }
+  return matcher.addListener(cb);
+}
+
+function removeListener(
+  matcher: MediaQueryList,
+  cb: (ev: MediaQueryListEvent) => void
+) {
+  if ("removeEventListener" in (matcher as any)) {
+    return matcher.removeEventListener("change", cb);
+  }
+  return matcher.removeListener(cb);
 }

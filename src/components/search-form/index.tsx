@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import style from "./search.module.css";
 
@@ -13,6 +14,10 @@ export default function SearchForm({
   const [searchQuery, setSearchQuery] = useState(currentSearch ?? "");
   const router = useRouter();
   const ref = useRef<HTMLInputElement>(null);
+
+  useHotkeys("shift+cmd+p,shift+ctrl+p", () => {
+    ref.current?.focus();
+  });
 
   useEffect(() => {
     if (autofocus) {
