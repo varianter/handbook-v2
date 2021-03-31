@@ -7,7 +7,7 @@ let handBookParagraphs: (SearchResult & {
   contentTags: string[];
 })[];
 
-let invertedSearchIndex: any;
+let invertedSearchIndex: { [word: string]: string[] };
 let searchIndexCreated = false;
 
 function getMatchingProps(obj: any, searchWord: string) {
