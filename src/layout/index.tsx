@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import style from "./layout.module.css";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import BackgroundBlobs from "src/background";
+import SearchForm from "src/components/search-form";
 
 const title = "Variant Håndbok";
 
-export const and = (...classes: string[]) => classes.join(" ");
+export const and = (...classes: (string | undefined)[]) =>
+  classes.filter(Boolean).join(" ");
 const isActiveHandbook = (handbookName: string, asPath: string) => {
   if (asPath === "/" && handbookName === "handbook") return true;
   return `/${handbookName}` === asPath;
@@ -25,47 +29,19 @@ const Layout: React.FC<LayoutProps> = ({
   handbooks,
   children,
 }) => {
-  const [searchQuery, setSearchQuery] = useState(currentSearch);
-  const [navActive, setNavActive] = useState(false);
-  const [screenWidth, setScreenWidth] = useState(0);
-  useEffect(() => {
-    setScreenWidth(window.innerWidth);
-    let timeoutId: any = null;
-    const setWindowSize = () => {
-      clearTimeout(timeoutId);
+  const modalRef = React.createRef<HTMLDivElement>();
+  const closeRef = React.createRef<HTMLButtonElement>();
 
-      timeoutId = setTimeout(() => setScreenWidth(window.innerWidth), 100);
-    };
-
-    window.addEventListener("resize", setWindowSize);
-    return () => {
-      window.removeEventListener("resize", setWindowSize);
-    };
-  }, []);
-
-  const isSmall = screenWidth < 600;
+  const { isMenuVisible, setMenuVisible, tabIndex } = useTogglableBurgerMenu(
+    modalRef,
+    closeRef
+  );
 
   const router = useRouter();
-
   const asPath = router.asPath;
 
-  const performSearch = () => {
-    if (searchQuery.length < 3) return;
-
-    router.push({
-      pathname: "/search",
-      query: { q: encodeURIComponent(searchQuery) },
-    });
-    setNavActive(false);
-  };
-
   return (
-    <div
-      className={style.main}
-      style={
-        navActive && isSmall ? { position: "fixed" } : { position: "relative" }
-      }
-    >
+    <div className={style.main}>
       <Head>
         <title>{title}</title>
         <link rel="icon" href={favicon} />
@@ -75,45 +51,35 @@ const Layout: React.FC<LayoutProps> = ({
         <meta name="twitter:site" content="@variant_as" />
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.variant.no/" />
+        <meta property="og:url" content="https://handbook.variant.no/" />
         <meta
           property="og:image"
           content="https://www.variant.no/og-header-min.png"
         />
       </Head>
-      {isSmall ? (
-        <header className={style.header}>
-          <button
-            className={style.burgerButtonContainer}
-            id="hamburger"
-            aria-labelledby="menu-label"
-            aria-expanded={navActive}
-            onClick={() => setNavActive(!navActive)}
-          >
-            <div
-              className={and(style.bar1, navActive ? style.bar1_change : "")}
-            />
-            <div
-              className={and(style.bar2, navActive ? style.bar2_change : "")}
-            />
-            <div
-              className={and(style.bar3, navActive ? style.bar3_change : "")}
-            />
-          </button>
-          <a href="/" className={style.header__logo}>
+      <header className={style.header}>
+        <Link href="/">
+          <a className={style.header__logo}>
             <img src={require("./variant-bw.svg")} alt="Variant" />
           </a>
-        </header>
-      ) : null}
-      <nav className={and(style.nav, navActive ? style.nav__active : " ")}>
+        </Link>
+
+        <div className={style.burgerButtonContainer}>
+          <span hidden id="menu-label">
+            Hovedmeny
+          </span>
+          <Hamburger
+            onClick={() => setMenuVisible(!isMenuVisible)}
+            isOpen={isMenuVisible}
+          />
+        </div>
+      </header>
+
+      <nav
+        className={and(style.nav, isMenuVisible ? style.nav__active : " ")}
+        ref={modalRef}
+      >
         <section className={style.nav__inner}>
-          {!isSmall ? (
-            <a href="/" className={style.nav__logo}>
-              <img src={require("./variant.svg")} alt="Variant" />
-            </a>
-          ) : (
-            <p>Håndbøker</p>
-          )}
           <ul className={style.nav__handbooks}>
             {handbooks.map((handbook) => {
               return (
@@ -125,19 +91,9 @@ const Layout: React.FC<LayoutProps> = ({
                       : style.nav__inner__link
                   }
                 >
-                  <a
-                    onClick={() => {
-                      router.push({
-                        href: "/[handbook]",
-                        pathname: handbook.name.toString(),
-                      });
-                      if (navActive) {
-                        setNavActive(false);
-                      }
-                    }}
-                  >
-                    {handbook.title}
-                  </a>
+                  <Link href={`/${handbook.name.toString()}`}>
+                    <a tabIndex={tabIndex}>{handbook.title}</a>
+                  </Link>
                 </li>
               );
             })}
@@ -150,12 +106,8 @@ const Layout: React.FC<LayoutProps> = ({
                   return (
                     <li key={heading} className={style.nav__inner__link}>
                       <a
-                        onClick={() => {
-                          if (navActive) {
-                            setNavActive(false);
-                          }
-                        }}
                         href={`#${heading.replace(/ /g, "-").toLowerCase()}`}
+                        tabIndex={tabIndex}
                       >
                         {heading}
                       </a>
@@ -165,30 +117,215 @@ const Layout: React.FC<LayoutProps> = ({
               </ul>
             </>
           ) : null}
-          <form
-            className={style.nav__inner__searchform}
-            onSubmit={(e) => {
-              e.preventDefault();
-              performSearch();
-            }}
-          >
-            <input
-              defaultValue={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit">Søk</button>
-          </form>
         </section>
+
+        <SearchForm currentSearch={currentSearch} />
       </nav>
       <section className={style.content}>{children}</section>
+
+      <BackgroundBlobs />
+
       <footer className={style.footer}>
-        Ser du noe som burde endres?
-        <a href="https://github.com/varianter/handbook">
-          Send oss en oppdatering.
-        </a>
+        <div className={style.footer__inner}>
+          <ul className={style.footer__social}>
+            <li>
+              <a
+                href="https://blog.variant.no"
+                title="Variant Blogg"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/medium.svg")}
+                  alt="Variant på Medium.com"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://twitter.com/variant_as"
+                title="Variant på Twitter"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/twitter.svg")}
+                  alt="Variant på Twitter"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/varianter"
+                title="Variant på Github"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/github.svg")}
+                  alt="Variant på Github"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://instagram.com/variant_as"
+                title="Variant på Instagram"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/instagram.svg")}
+                  alt="Variant på Instagram"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://fb.me/varianter"
+                title="Variant på Facebook"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/facebook.svg")}
+                  alt="Variant på Facebook"
+                />
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.linkedin.com/company/variant-as/"
+                title="Variant på LinkedIn"
+                rel="external"
+              >
+                <img
+                  src={require("./logos/linkedin.svg")}
+                  alt="Variant på LinkedIn"
+                />
+              </a>
+            </li>
+          </ul>
+        </div>
       </footer>
     </div>
   );
 };
 
 export default Layout;
+
+function useTogglableBurgerMenu<T extends HTMLElement, R extends HTMLElement>(
+  modalRef: React.RefObject<T>,
+  closeButton: React.RefObject<R>
+) {
+  const [isMenuVisible, setMenuVisible] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  useEffect(() => {
+    setTabIndex(isMenuVisible ? 0 : -1);
+
+    // Avoid scrolling when menu is visible.
+    if (isMenuVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "initial";
+    }
+  }, [isMenuVisible]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!isMenuVisible || closeButton.current?.contains(e.target as Node)) {
+        return;
+      }
+      if (!e.target || !modalRef.current?.contains(e.target as Node)) {
+        return setMenuVisible(false);
+      }
+      if ((e.target as Node).nodeName === "A") {
+        return setMenuVisible(false);
+      }
+    };
+    document.body.addEventListener("click", handleClickOutside);
+    return () => document.body.removeEventListener("click", handleClickOutside);
+  }, [isMenuVisible, modalRef, closeButton]);
+
+  const handleTabKey = useCallback(
+    (e: KeyboardEvent) => {
+      const focusableModalElements =
+        modalRef.current?.querySelectorAll<HTMLElement>(
+          '[role="button"],a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+        ) ?? [];
+      const allFocusables =
+        document.querySelectorAll<HTMLElement>(
+          '[role="button"],a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+        ) ?? [];
+
+      const first = focusableModalElements[0];
+      const last = focusableModalElements[focusableModalElements.length - 1];
+      const next =
+        Array.from(allFocusables).find(
+          (_, i) => allFocusables[i - 1] === document.activeElement
+        ) ?? null;
+      const previous =
+        Array.from(allFocusables).find(
+          (_, i) => allFocusables[i + 1] === document.activeElement
+        ) ?? null;
+
+      // On normal tabbing. If next element is outside modal, jump to first element
+      if (!e.shiftKey && !modalRef.current?.contains(next)) {
+        first?.focus();
+        return e.preventDefault();
+      }
+
+      // On "reversed" tabbing. If previous element is outside modal, jump to last element
+      if (e.shiftKey && !modalRef.current?.contains(previous)) {
+        last?.focus();
+        return e.preventDefault();
+      }
+
+      // Not start or end, follow normal tab flow.
+    },
+    [modalRef]
+  );
+  useEffect(() => {
+    function keyListener(e: KeyboardEvent) {
+      if (!isMenuVisible) {
+        return;
+      }
+      if (e.key === "Escape") {
+        return setMenuVisible(false);
+      }
+      if (e.key === "Tab") {
+        return handleTabKey(e);
+      }
+    }
+    document.addEventListener("keydown", keyListener);
+    return () => document.removeEventListener("keydown", keyListener);
+  }, [isMenuVisible, handleTabKey]);
+
+  return {
+    isMenuVisible,
+    setMenuVisible,
+    tabIndex,
+  };
+}
+
+function Hamburger({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={and(
+        style.hamburger,
+        isOpen ? style.hamburger__open : undefined
+      )}
+      type="button"
+      aria-labelledby="menu-label"
+      aria-expanded={isOpen}
+      onClick={onClick}
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  );
+}

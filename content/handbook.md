@@ -10,8 +10,8 @@ eller legge til innhold i den. Håndboken
 eller [stille spørsmål](https://github.com/varianter/handbook/issues).
 
 Om du ikke er en variant men liker det du leser,
-[ta en titt på ledige stillinger hos oss](https://jobs.variant.no/). Mer info om
-oss på [nettsiden vår](https://www.variant.no).
+[ta en titt på ledige stillinger hos oss](https://www.variant.no/jobs). Mer info
+om oss på [nettsiden vår](https://www.variant.no).
 
 <img src="./assets/illustrations/mission.svg" alt="Illustrasjon for formål og verdier" class="illustration illustration--right illustration--mission" />
 
@@ -283,7 +283,7 @@ dette har vi varierende aktiviteter som vi håper familiene har lyst til å vær
 med oss på.
 
 Variant skal selvsagt ikke definere hva som regnes som familie. Hvem du ønsker å
-invitere inn til variantfamilien bestemmer du selv. Om det er kone, barn,
+invitere inn til variantfamilien bestemmer du selv. Om det er partner, barn,
 foreldre eller venner er opp til deg. Vi sier: Hjertelig velkommen!
 
 Variant skal bidra til nærmiljøet og samfunnet der vi finnes. Som beskrevet
@@ -406,7 +406,7 @@ Her møtes vi til en uformell samtale for å finne ut om begge parter har felles
 verdier og mål. Rett og slett om vi er rett for hverandre og om vi kan gjøre
 hverandre bedre.
 
-### 2. Samarbeid om en problemstilling (2-3 timer)
+### 2. Samarbeid om en problemstilling (2-3 timer)
 
 Om begge parter fortsatt er interessert så er det på tide med neste møte. Vi
 starter med en introduksjon til en problemstilling før vi setter i gang med det
@@ -418,7 +418,7 @@ samarbeide om:
 - Konseptualisere, designe og implementere mobilnavigasjon for nettside.
 - Implementere et enkelt easter-egg spill i nettleseren.
 
-### 3. Fremtidsdiskusjoner (45 min)
+### 3. Fremtidsdiskusjoner (45 min)
 
 Siste steget i prosessen er en litt mer praktisk rettet samtale. Her får
 jobbsøker mulighet til å stille flere spørsmål til og om Variant samtidig som vi

@@ -33,6 +33,7 @@ export const getStaticProps: GetStaticProps<HandbookProps> = async (
       props: {
         handbooks: [],
         subHeadings: [],
+        filename: "",
       },
     };
   }
