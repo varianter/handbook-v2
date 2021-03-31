@@ -111,12 +111,12 @@
 }
 
 .nav__inner__link {
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   color: var(--color-secondary3__shade1);
 }
 
 .nav__inner__link__active {
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   color: var(--color-primary__tint1);
 }
 .nav__inner__link__active a {
