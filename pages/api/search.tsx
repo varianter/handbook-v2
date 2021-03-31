@@ -93,7 +93,10 @@ const filterWords = [
 function splitTrimAndLowercase(str: string): string[] {
   return str
     .toLowerCase()
-    .replace(/\r?\n|\r/g, "")
+    .replace(
+      /(\r?\n|\r)|(?:\.)|(?:\,)|(?:\[)|(?:\])|(?:\()|(?:\))|(?:\*\*)|(?:\:)|(?:\?)/g,
+      ""
+    )
     .trim()
     .split(" ")
     .filter((x) => !filterWords.includes(x));
