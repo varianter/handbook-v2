@@ -17,6 +17,14 @@ function getMatchingProps(obj: any, searchWord: string) {
   return results;
 }
 
+const insertSearchKeyAndValue = (key: string, value: string) => {
+  if (!invertedSearchIndex[key]) {
+    invertedSearchIndex[key] = [value];
+  } else {
+    invertedSearchIndex[key].push(value);
+  }
+};
+
 async function buildSearchIndex() {
   handbooks = await getHandbookData(true);
   handBookParagraphs = handbooks.flatMap((hanbook) =>
@@ -25,20 +33,12 @@ async function buildSearchIndex() {
 
   invertedSearchIndex = {};
   handBookParagraphs.forEach((handbookParagraph) => {
-    splitTrimAndLowercase(handbookParagraph.header).forEach((word: string) => {
-      if (!invertedSearchIndex[word]) {
-        invertedSearchIndex[word] = [handbookParagraph.header];
-      } else {
-        invertedSearchIndex[word].push(handbookParagraph.header);
-      }
-    });
-    handbookParagraph.contentTags.forEach((word: string) => {
-      if (!invertedSearchIndex[word]) {
-        invertedSearchIndex[word] = [handbookParagraph.header];
-      } else {
-        invertedSearchIndex[word].push(handbookParagraph.header);
-      }
-    });
+    splitTrimAndLowercase(handbookParagraph.header).forEach((word: string) =>
+      insertSearchKeyAndValue(word, handbookParagraph.header)
+    );
+    handbookParagraph.contentTags.forEach((word: string) =>
+      insertSearchKeyAndValue(word, handbookParagraph.header)
+    );
   });
 
   searchIndexCreated = true;
