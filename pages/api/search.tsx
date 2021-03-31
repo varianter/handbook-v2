@@ -1,9 +1,54 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getHandbookData, HandbookData } from "src/utils";
 
+let handbooks: HandbookData[];
+let handBookParagraphs: (SearchResult & {
+  headerTags: string[];
+  contentTags: string[];
+})[];
+
+let invertedSearchIndex: any;
+let searchIndexCreated = false;
+
+function getMatchingProps(obj: any, searchWord: string) {
+  const pattern = new RegExp(searchWord, "g");
+  const results = [];
+  for (let prop in obj) if (pattern.test(prop)) results.push(prop);
+  return results;
+}
+
+async function buildSearchIndex() {
+  handbooks = await getHandbookData(true);
+  handBookParagraphs = handbooks.flatMap((hanbook) =>
+    getHandBookParagraphs(hanbook)
+  );
+
+  invertedSearchIndex = {};
+  handBookParagraphs.forEach((handbookParagraph) => {
+    splitTrimAndLowercase(handbookParagraph.header).forEach((word: string) => {
+      if (!invertedSearchIndex[word]) {
+        invertedSearchIndex[word] = [handbookParagraph.header];
+      } else {
+        invertedSearchIndex[word].push(handbookParagraph.header);
+      }
+    });
+    handbookParagraph.contentTags.forEach((word: string) => {
+      if (!invertedSearchIndex[word]) {
+        invertedSearchIndex[word] = [handbookParagraph.header];
+      } else {
+        invertedSearchIndex[word].push(handbookParagraph.header);
+      }
+    });
+  });
+
+  searchIndexCreated = true;
+}
 async function doSearch(searchQuery: string[]): Promise<SearchResult[]> {
-  const handbooks = await getHandbookData(true);
-  const res = handbooks.flatMap((x) => searchHandbook(x, searchQuery));
+  if (!searchIndexCreated) {
+    await buildSearchIndex();
+  }
+
+  const res = searchHandbook(searchQuery);
   return res;
 }
 
@@ -16,10 +61,38 @@ export interface SearchResult {
   handbookName: string;
 }
 
-function searchHandbook(
-  handbook: HandbookData,
-  search: string[]
-): SearchResult[] {
+function searchHandbook(searchQuery: string[]): SearchResult[] {
+  let result: SearchResult[] = [];
+
+  searchQuery.forEach((searchWord) => {
+    let properties = getMatchingProps(invertedSearchIndex, searchWord);
+
+    properties.forEach((property) => {
+      if (invertedSearchIndex[property]) {
+        invertedSearchIndex[property].forEach((title: string) => {
+          let handbookParagraph = handBookParagraphs.find(
+            (paragraph) => paragraph.header == title
+          );
+          if (
+            !result.some((paragraph: SearchResult) => paragraph.header == title)
+          ) {
+            if (handbookParagraph) {
+              result.push(handbookParagraph);
+            }
+          }
+        });
+      }
+    });
+  });
+  return result;
+}
+
+function getHandBookParagraphs(
+  handbook: HandbookData
+): (SearchResult & {
+  headerTags: string[];
+  contentTags: string[];
+})[] {
   if (!handbook.content) return [];
   let lines = handbook.content.split(/\r?\n/);
   const result = [];
@@ -37,14 +110,7 @@ function searchHandbook(
     if (titleRes) {
       const level = titleRes[1].trim().length;
 
-      if (
-        currentheading &&
-        search.some(
-          (s) =>
-            currentheading?.headerTags.includes(s) ||
-            currentheading?.contentTags.includes(s)
-        )
-      ) {
+      if (currentheading) {
         result.push(currentheading);
       }
 
