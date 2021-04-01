@@ -1,5 +1,9 @@
 # Variant Handobok
 
+**THIS IS ARCHIVED AND MOVED TO ORIGINAL HANDBOOK TO HAVE FULL CONTEXT FOR ALL DISCUSSIONS AND TEXT CHANGES**
+
+**See https://github.com/varianter/handbook**
+
 ## Text
 
 Edit text by changing files in [content](./content).
