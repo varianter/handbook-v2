@@ -22,8 +22,8 @@ body,
   position: relative;
 }
 html {
-  --font-size-min: 16;
-  --font-size-max: 20;
+  --font-size-min: 14;
+  --font-size-max: 18;
   background: var(--color-secondary4__tint2);
   scroll-behavior: smooth;
 }

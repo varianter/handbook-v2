@@ -50,7 +50,7 @@
 .nav {
   width: 20rem;
 
-  background-color: var(--color-secondary1);
+  background-color: var(--color-secondary4);
   position: fixed;
 
   height: 100vh;
@@ -103,7 +103,7 @@
 .nav__inner p {
   font-weight: 500;
   font-size: 1.5rem;
-  color: var(--color-secondary1--text);
+  color: var(--color-primary);
 }
 .nav__inner ul {
   list-style-type: lower-roman;
@@ -111,13 +111,13 @@
 }
 
 .nav__inner__link {
-  padding-bottom: 1.5rem;
-  color: var(--color-secondary3);
+  padding-bottom: 1rem;
+  color: var(--color-secondary3__shade1);
 }
 
 .nav__inner__link__active {
-  color: var(--color-primary);
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  color: var(--color-primary__tint1);
 }
 .nav__inner__link__active a {
   border-bottom: 2px solid var(--color-primary__tint2);
@@ -128,7 +128,7 @@
 
 .nav__inner ul a {
   text-decoration: none;
-  color: var(--color-secondary1--text);
+  color: var(--color-secondary4--text);
 }
 
 .nav__inner ul a:hover {
