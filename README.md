@@ -1,8 +1,12 @@
 # Variant Handobok
 
-**THIS IS ARCHIVED AND MOVED TO ORIGINAL HANDBOOK TO HAVE FULL CONTEXT FOR ALL DISCUSSIONS AND TEXT CHANGES**
+> **THIS IS ARCHIVED AND MOVED TO ORIGINAL HANDBOOK TO HAVE FULL CONTEXT FOR ALL DISCUSSIONS AND TEXT CHANGES**
+> 
+> **See https://github.com/varianter/handbook**
 
-**See https://github.com/varianter/handbook**
+
+---
+
 
 ## Text
 
